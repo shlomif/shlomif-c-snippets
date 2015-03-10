@@ -1,29 +1,28 @@
 
 use strict;
+use warnings;
 
 use Math::BigInt;
 
-my ($numer, $denom, $item, $pi);
-my ($a);
+use IO::All qw/ io /;
 
-$numer = Math::BigInt->new("2");
-$item = Math::BigInt->new("2");
-$denom = Math::BigInt->new("1");
+my $numer = Math::BigInt->new("2");
+my $item = Math::BigInt->new("2");
+my $denom = Math::BigInt->new("1");
 
-for($a=1;$a<=130;$a++)
+for my $i (1 .. 130)
 {
-    if ($a % 30 == 0)
+    if ($i % 30 == 0)
     {
-        print "$a\n";
+        print "$i\n";
     }
-    $denom *= (2*$a+1);
-    $item *= $a;
-    $numer = $item + ($numer*(2*$a+1));
-   
+    $denom *= (2*$i+1);
+    $item *= $i;
+    $numer = $item + ($numer*(2*$i+1));
+
 }
 
-$pi = ($numer*(Math::BigInt->new("1".("0"x160)))) / $denom;
-open O, ">dump.txt";
-print "pi is $pi.\n";
-close (O);
+my $pi = ($numer*(Math::BigInt->new("1".("0"x160)))) / $denom;
+
+io->file('dump.txt')->print("pi is $pi.\n");
 

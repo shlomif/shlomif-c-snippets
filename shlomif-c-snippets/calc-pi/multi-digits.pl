@@ -1,5 +1,6 @@
 
 use strict;
+use warnings;
 
 my $base = 10000;
 #my $base = 10;
@@ -21,7 +22,7 @@ sub add_multi_digit
         $one = $two;
         $two = $temp;
     }
-    
+
     for($a=0;$a<$max_len+1;$a++)
     {
         $result[$a] = 0;
@@ -60,9 +61,9 @@ sub subtract_multi_digit
     else
     {
         $min_len = scalar(@{$one});
-        $max_len = scalar(@{$two});        
+        $max_len = scalar(@{$two});
     }
-    
+
     for($a=0;$a<$max_len;$a++)
     {
         $result[$a] = 0;
@@ -94,7 +95,7 @@ sub subtract_multi_digit
         last if ($result[$a] != 0);
     }
     @result = @result[0..$a];
-    
+
 
     return \@result;
 }
@@ -125,7 +126,7 @@ sub multiply_multi_digit
                 {
                     $result[$c+1] += int ($result[$c] / $base);
                     $result[$c] %= $base;
-                }                
+                }
             }
         }
     }
@@ -135,8 +136,8 @@ sub multiply_multi_digit
         last if ($result[$a] != 0);
     }
     @result = @result[0..$a];
-        
-    return \@result;    
+
+    return \@result;
 }
 
 sub divide_multi_digit
@@ -167,7 +168,7 @@ sub divide_multi_digit
     }
 
     while (1)
-    {    
+    {
         # Check if the division can be ended
         for($a=$d_digit, $d_digit = -1;$a>=0;$a--)
         {
@@ -177,7 +178,7 @@ sub divide_multi_digit
                 last;
             }
         }
-    
+
         if ($db_digit > $d_digit)
         {
             for($a=scalar(@result)-1;$a>=1;$a--)
@@ -186,11 +187,11 @@ sub divide_multi_digit
             }
             @result = @result[0..$a];
 
-            
+
             return \@result;
         }
 
-    
+
         if ($db_digit == $d_digit)
         {
             for($a=$d_digit;$a>=0;$a--)
@@ -200,9 +201,9 @@ sub divide_multi_digit
                     for($a=scalar(@result)-1;$a>=1;$a--)
                     {
                         last if ($result[$a] != 0);
-                    }                              
+                    }
                     @result = @result[0..$a];
-                    
+
                     return \@result;
                 }
                 elsif ($div_by->[$a] < $divide->[$a])
@@ -270,7 +271,7 @@ sub divide_multi_digit
             $result[$a+1] += int ($result[$a] / $base);
             $result[$a] %= $base;
         }
-    }    
+    }
 }
 
 
@@ -301,31 +302,29 @@ sub to_multi_digit
     return \@result;
 }
 
-my ($numer, $denom, $item, $pi);
-my ($a);
+my $numer = [ 2 ];
+my $item = [ 2 ];
+my $denom = [ 1 ];
 
-$numer = [ 2 ];
-$item = [ 2 ];
-$denom = [ 1 ];
-
-for($a=1;$a<=130;$a++)
+for my $i (1 .. 130)
 {
-    if ($a % 30 == 0)
+    if ($i % 30 == 0)
     {
-        print "$a\n";
+        print "$i\n";
     }
-    $denom = multiply_multi_digit($denom, to_multi_digit((2*$a+1)));
-    $item = multiply_multi_digit($item, to_multi_digit($a));
-    $numer = add_multi_digit($item, multiply_multi_digit($numer, to_multi_digit(2*$a+1)));
-    
+    $denom = multiply_multi_digit($denom, to_multi_digit((2*$i+1)));
+    $item = multiply_multi_digit($item, to_multi_digit($i));
+    $numer = add_multi_digit($item, multiply_multi_digit($numer, to_multi_digit(2*$i+1)));
+
     #print "denom is ", join('', reverse(@{$denom})), "\n";
     #print "item is ", join('', reverse(@{$item})), "\n";
     #print "numer is ", join('', reverse(@{$numer})), "\n";
 }
 
-$pi = divide_multi_digit([ split(//, '0'x40), @{$numer} ], $denom);
-open O, ">dump.txt";
+my $pi = divide_multi_digit([ split(//, '0'x40), @{$numer} ], $denom);
+
+open my $out_fh, '>', 'dump.txt';
 print "pi is ", join('', reverse(@{$pi})), "\n";
-print O "pi is ", join('', reverse(@{$pi})), "\n";
-close (O);
+print {$out_fh} "pi is ", join('', reverse(@{$pi})), "\n";
+close ($out_fh);
 
