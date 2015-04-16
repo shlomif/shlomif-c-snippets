@@ -1,0 +1,9 @@
+=encoding utf8
+
+=head1 ABOUT
+
+This repository contains various C, C++, etc. snippets by Shlomi Fish (
+L<http://www.shlomifish.org/> ) and friends. Check the sources themselves
+for their licences.
+
+=cut
