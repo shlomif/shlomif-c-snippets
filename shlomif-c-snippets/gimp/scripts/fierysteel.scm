@@ -125,11 +125,11 @@
     (let* ((sheight (* height perc))
            (ycoord (- height sheight))
            ; Add a layer
-           (fire1-layer (car (gimp-layer-new img 
-                                             width height 
-                                             RGBA-IMAGE "Fire 1" 
+           (fire1-layer (car (gimp-layer-new img
+                                             width height
+                                             RGBA-IMAGE "Fire 1"
                                              100 NORMAL))))
-                    
+
       (gimp-image-add-layer img fire1-layer 0)
                     ; Clear it
       (gimp-selection-all img)
@@ -151,7 +151,7 @@
       (let ((fire2-layer (car (gimp-layer-copy fire1-layer TRUE))))
         (gimp-image-add-layer img fire2-layer 0) ; top
         (gimp-drawable-set-name fire2-layer "Fire 2")
-  
+
         (gimp-image-set-active-layer img fire2-layer)
         (gimp-layer-set-preserve-trans fire2-layer TRUE)
         (gimp-context-set-foreground '(228 170 4)) ; Yellow
@@ -160,22 +160,22 @@
                   100 255 FALSE 1 1)
         (gimp-layer-set-preserve-trans fire2-layer FALSE)
         (gimp-selection-none img)
-  
+
         (gimp-drawable-offset fire2-layer FALSE 1 0 (/ height 8))
-  
+
         ; The third fire layer
         (let ((fire3-layer (car (gimp-layer-copy fire1-layer TRUE))))
           (gimp-image-add-layer img fire3-layer 0) ; top
           (gimp-drawable-set-name fire3-layer "Fire 3")
           (gimp-drawable-offset fire3-layer FALSE 1 0
                        (* 2.6 (/ height 8)))
-    
+
           ; resize the said layer...
           (gimp-image-set-active-layer img fire3-layer)
           (gimp-selection-all img)
           (gimp-drawable-transform-scale-default fire3-layer 0
                   (* height 0.6) width height TRUE FALSE)
-    
+
           ; spread, spindle, mutilate
           (plug-in-spread 1 img fire1-layer 0 (* 3 sprd))
           (plug-in-spread 1 img fire2-layer 0 (* 2 sprd))
@@ -192,7 +192,7 @@
 
       (gimp-layer-set-preserve-trans fire-layer TRUE)
       (plug-in-gauss-rle 1 img fire-layer (* 2 sprd) TRUE TRUE)
-      (gimp-layer-set-preserve-trans fire-layer FALSE)          
+      (gimp-layer-set-preserve-trans fire-layer FALSE)
 
       (gimp-drawable-set-visible text2-layer TRUE)
       (gimp-drawable-set-visible bg-layer TRUE)
@@ -205,16 +205,16 @@
       ; Then, Let's nastyize it.
       (gimp-layer-set-preserve-trans fire-layer TRUE)
       (plug-in-randomize-pick 1 img fire-layer rndamt 80 10 6942)
-      (gimp-layer-set-preserve-trans fire-layer FALSE)          
+      (gimp-layer-set-preserve-trans fire-layer FALSE)
 
       ; Here we use another kewl displacement thing... it really rules.
       ; Displacement was one of the coolest things I knew about back
       ; in 0.59 era.
 
       (if (eq? turbultog TRUE)
-          (let ((turbul-layer (car (gimp-layer-new img 
+          (let ((turbul-layer (car (gimp-layer-new img
                                                    width height
-                                                   RGBA-IMAGE "Turbul" 
+                                                   RGBA-IMAGE "Turbul"
                                                    100 NORMAL))))
 
         (gimp-image-add-layer img turbul-layer 0)
@@ -240,7 +240,7 @@
           (gimp-image-add-layer img turbul2-layer 0)
           (gimp-image-set-active-layer img turbul2-layer)
           ; Uh, great. Now more fun.
-  
+
           ; First half
           (gimp-selection-none img)
           (gimp-rect-select img 0 (/ height 2) width (/ height 2)
@@ -248,7 +248,7 @@
           (gimp-context-set-foreground '(0 0 0)) ; Black
           (gimp-edit-bucket-fill turbul2-layer
                     FG-BUCKET-FILL NORMAL 100 255 FALSE 1 1)
-  
+
           ; Second half
           (gimp-context-set-foreground '(255 255 255)) ; White
           (gimp-selection-invert img)
@@ -256,17 +256,17 @@
                     FG-BUCKET-FILL NORMAL 100 255 FALSE
                     (+ (/ height 2) 1) 1)
           (gimp-selection-none img)
-  
+
           (plug-in-ripple 1 img turbul2-layer
                   (/ width 8) (/ height 4) 1 0 1 FALSE FALSE)
-  
+
           (plug-in-spread 1 img turbul2-layer (/ width 12) (/ height 12))
-  
+
           (plug-in-gauss-rle 1 img turbul2-layer (/ width 5) TRUE TRUE)
-  
+
           ; Bleah
           (plug-in-oilify 1 img turbul2-layer 6 0)
-  
+
           ; First displacement
           (plug-in-displace 1 img turbul-layer
                     (* 1.5 turbulence) (* 3 turbulence)
