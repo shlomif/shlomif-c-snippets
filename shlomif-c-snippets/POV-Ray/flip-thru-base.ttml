@@ -1,0 +1,57 @@
+#include "colors.inc"
+#include "stones.inc"
+[% SET cross_width = "0.1" %]
+[% SET cross_len = "0.5" %]
+[% SET cone_height = 10 %]
+[% BLOCK filling %]
+pigment { Green }
+[% END %]
+background { color White }
+camera {
+    location <0, -[% cone_height / 2 %], 13>
+    look_at  <0, -[% cone_height / 2 %], 0.5>
+  }
+light_source { <0, -[% cone_height / 2 %], 8> color White}
+union {
+cone {
+    <0, 0, 0>, 0    // Center and radius of one end
+    <0, -[% cone_height %], 0>, 0.75    // Center and radius of other end
+    [% PROCESS filling %]
+}
+union {
+[% BLOCK cross_part %]
+prism {
+    linear_sweep
+    linear_spline
+    0,
+    [% cone_height %],
+    5,
+    <-[% x %],-[% y %]>,<[% x %],-[% y %]>,<[% x %],[% y %]>,<-[% x %],[% y %]>,<-[% x %],-[% y %]>
+    [% PROCESS filling %]
+}
+[% END %]
+[% SET x=cross_len %]
+[% SET y=cross_width %]
+[% PROCESS cross_part %]
+[% SET x=cross_width %]
+[% SET y=cross_len %]
+[% PROCESS cross_part %]
+rotate <90,0,0>
+[% IF reverse %]
+rotate <0,-90,0>
+[% END %]
+scale 0.5
+translate <0,-[% cone_height / 2 %],0>
+}
+cylinder {
+    <0, -[% cone_height / 2 %], 0>
+[% UNLESS reverse %]
+    <-[% cone_height / 2 %], -[% cone_height / 2 %], 0>
+[% ELSE %]
+    <0, -[% cone_height / 2 %], [% cone_height / 2 %]>
+[% END %]
+    0.25
+    [% PROCESS filling %]
+}
+rotate <0,45,-30>
+}
