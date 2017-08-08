@@ -1,7 +1,7 @@
 /*
  * The canonical Hello World program kept here to avoid code duplication
  *
- * License is the MIT/X11 license - http://opensource.org/licenses/MIT .
+ * License is the MIT/Expat license - http://opensource.org/licenses/MIT .
  * ( https://en.wikipedia.org/wiki/MIT_License ).
  */
 #include <stdio.h>
