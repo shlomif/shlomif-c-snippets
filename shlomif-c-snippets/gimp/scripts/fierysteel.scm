@@ -50,7 +50,7 @@
                         size PIXELS font)))
      (brd-layer
       (car (gimp-layer-new img width height
-                   GRAYA-IMAGE "border" 100 OVERLAY)))
+                   GRAYA-IMAGE "border" 100 LAYER-MODE-OVERLAY-LEGACY)))
 
      (old-fg (car (gimp-context-get-foreground)))
      (old-bg (car (gimp-context-get-background))))
@@ -73,7 +73,7 @@
     (gimp-image-set-active-layer img bg-layer)
     (gimp-selection-all img)
     (gimp-context-set-foreground '(0 0 0))
-    (gimp-edit-bucket-fill bg-layer FG-BUCKET-FILL NORMAL 100 255 FALSE 1 1)
+    (gimp-edit-bucket-fill bg-layer FG-BUCKET-FILL LAYER-MODE-NORMAL-LEGACY 100 255 FALSE 1 1)
     (gimp-context-set-foreground old-fg)
     (gimp-selection-none img)
 
@@ -82,7 +82,7 @@
     (gimp-layer-set-preserve-trans text2-layer TRUE)     ; Preserve trans.
     (gimp-context-set-gradient grad)
     (gimp-edit-blend text2-layer
-        CUSTOM NORMAL LINEAR 100 0 REPEAT-NONE FALSE 0 3 0.2 TRUE
+        BLEND-CUSTOM LAYER-MODE-NORMAL-LEGACY GRADIENT-LINEAR 100 0 REPEAT-NONE FALSE 0 3 0.2 TRUE
         (/ width 2) 0 (/ width 2) height)
     (gimp-layer-set-preserve-trans text2-layer FALSE)
     ; and hide the bg and this new one
@@ -91,12 +91,12 @@
     (gimp-drawable-set-visible text2-layer FALSE)
 
     ; Add white layer
-    (let ((tmp-layer (car (gimp-layer-new img width height RGB-IMAGE "Temp" 100 NORMAL))))
+    (let ((tmp-layer (car (gimp-layer-new img width height RGB-IMAGE "Temp" 100 LAYER-MODE-NORMAL-LEGACY))))
         (gimp-image-add-layer img tmp-layer 3)
         (gimp-image-set-active-layer img tmp-layer)
         (gimp-selection-all img)
         (gimp-context-set-foreground '(255 255 255))
-        (gimp-edit-bucket-fill tmp-layer FG-BUCKET-FILL NORMAL 100 255 FALSE 1 1)
+        (gimp-edit-bucket-fill tmp-layer FG-BUCKET-FILL LAYER-MODE-NORMAL-LEGACY 100 255 FALSE 1 1)
         (gimp-context-set-foreground old-fg)
         (gimp-selection-none img))
 
@@ -115,7 +115,7 @@
       (plug-in-bump-map 1 img text2-layer bump-layer
               (if (eq? fierytog FALSE) 135.00 90.00)
               (if (eq? fierytog FALSE) 45.00 30.0)
-              6 0 0 0 0 FALSE FALSE LINEAR)
+              6 0 0 0 0 FALSE FALSE GRADIENT-LINEAR)
 
       (gimp-image-remove-layer img bump-layer))
 ;OK UNTIL HERE
@@ -128,16 +128,16 @@
            (fire1-layer (car (gimp-layer-new img
                                              width height
                                              RGBA-IMAGE "Fire 1"
-                                             100 NORMAL))))
+                                             100 LAYER-MODE-NORMAL-LEGACY))))
 
       (gimp-image-add-layer img fire1-layer 0)
                     ; Clear it
       (gimp-selection-all img)
       (gimp-edit-clear fire1-layer)
                     ; Make lower part red
-      (gimp-rect-select img 0 ycoord width sheight REPLACE FALSE 0)
+      (gimp-rect-select img 0 ycoord width sheight CHANNEL-OP-REPLACE FALSE 0)
       (gimp-context-set-foreground '(180 0 20))
-      (gimp-edit-bucket-fill fire1-layer FG-BUCKET-FILL NORMAL
+      (gimp-edit-bucket-fill fire1-layer FG-BUCKET-FILL LAYER-MODE-NORMAL-LEGACY
                 100 255 FALSE 1 1)
       (gimp-selection-none img)
 
@@ -156,7 +156,7 @@
         (gimp-layer-set-preserve-trans fire2-layer TRUE)
         (gimp-context-set-foreground '(228 170 4)) ; Yellow
         (gimp-selection-all img)
-        (gimp-edit-bucket-fill fire2-layer FG-BUCKET-FILL NORMAL
+        (gimp-edit-bucket-fill fire2-layer FG-BUCKET-FILL LAYER-MODE-NORMAL-LEGACY
                   100 255 FALSE 1 1)
         (gimp-layer-set-preserve-trans fire2-layer FALSE)
         (gimp-selection-none img)
@@ -215,7 +215,7 @@
           (let ((turbul-layer (car (gimp-layer-new img
                                                    width height
                                                    RGBA-IMAGE "Turbul"
-                                                   100 NORMAL))))
+                                                   100 LAYER-MODE-NORMAL-LEGACY))))
 
         (gimp-image-add-layer img turbul-layer 0)
 
@@ -236,7 +236,7 @@
         (let ((turbul2-layer
               (car (gimp-layer-new img width height
                        RGBA-IMAGE "Turbul2"
-                       100 NORMAL))))
+                       100 LAYER-MODE-NORMAL-LEGACY))))
           (gimp-image-add-layer img turbul2-layer 0)
           (gimp-image-set-active-layer img turbul2-layer)
           ; Uh, great. Now more fun.
@@ -247,13 +247,13 @@
                     0 FALSE 10)
           (gimp-context-set-foreground '(0 0 0)) ; Black
           (gimp-edit-bucket-fill turbul2-layer
-                    FG-BUCKET-FILL NORMAL 100 255 FALSE 1 1)
+                    FG-BUCKET-FILL LAYER-MODE-NORMAL-LEGACY 100 255 FALSE 1 1)
 
           ; Second half
           (gimp-context-set-foreground '(255 255 255)) ; White
           (gimp-selection-invert img)
           (gimp-edit-bucket-fill turbul2-layer
-                    FG-BUCKET-FILL NORMAL 100 255 FALSE
+                    FG-BUCKET-FILL LAYER-MODE-NORMAL-LEGACY 100 255 FALSE
                     (+ (/ height 2) 1) 1)
           (gimp-selection-none img)
 
@@ -287,7 +287,7 @@
       (plug-in-oilify 1 img fire-layer 3 0)
 
       ; Finally, make the flames burrrrrn...
-      (gimp-layer-set-mode fire-layer ADDITION)
+      (gimp-layer-set-mode fire-layer LAYER-MODE-ADDITION-LEGACY)
 
       (if (eq? fulltog FALSE)
           (begin
@@ -328,13 +328,13 @@
 ;
 (script-fu-register
  "script-fu-fiery-steel"
- "<Toolbox>/Xtns/Script-Fu/Logos/Fiery Steel..."
+ "Fiery Steel..."
  (string-append
  "An effect inspired by the \"Terminator 2: Judgement Day\" "
  "opening titles. Metallic letters in hellfire. $Revision: 1.5.1.0 $")
  "Weyfour WWWWolf (Urpo Lankinen) <wwwwolf@iki.fi>"
  "Weyfour WWWWolf"
- "9 May 1998 (Enhanced greatly on 19 May, 29 May, 18-19 July)"
+ "1998/05/09"
  ""
  SF-STRING     "Text String"           "RGRNCA"
  SF-FONT       "Font" "-freefont-crillee-normal-r-normal-*-140-*-*-*-p-*-*-*"
@@ -359,6 +359,9 @@
 ; Does not work, drats...
 ; SF-TOGGLE "Send flame as E-mail"   FALSE
 )
+
+(script-fu-menu-register "script-fu-fiery-steel" "<Image>/Filters/Decor")
+
 
 
 ;(define (script-fu-fiery-steel
