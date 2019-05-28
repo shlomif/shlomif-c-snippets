@@ -5,7 +5,7 @@ cfact: fact.c
 
 afact: fact.asm
 	yasm -f elf32 $<
-	gcc -Wall -o $@ fact.o
+	gcc -m32 -Wall -o $@ fact.o
 
 clean:
 	rm -f cfact
