@@ -7,10 +7,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int num;
-int len;
-int * result;
-int i, digit_idx, r;
+typedef unsigned myint;
+myint num;
+myint len;
+myint * result;
+myint i, r;
 
 int main(int argc, char * argv[])
 {
@@ -24,7 +25,7 @@ int main(int argc, char * argv[])
     for ( i = 2 ; i <= num ; i++)
     {
         r = 0;
-        for ( digit_idx = 0 ; digit_idx < len ; digit_idx++ )
+        for ( myint digit_idx = 0 ; digit_idx < len ; digit_idx++ )
         {
             r += result[digit_idx] * i;
             result[digit_idx] = r % 10000;
@@ -42,7 +43,7 @@ int main(int argc, char * argv[])
 
     printf("%d", result[len-1]);
 
-    for (digit_idx = len-2 ; digit_idx >= 0 ; digit_idx--)
+    for (int digit_idx = len-2 ; digit_idx >= 0 ; digit_idx--)
     {
         printf("%04d", result[digit_idx]);
     }

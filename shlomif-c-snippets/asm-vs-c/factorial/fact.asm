@@ -27,7 +27,7 @@ calc_n_loop_start:
     sub bl, '0'
     mul edi
     add eax, ebx
-    inc ecx
+    add ecx, 1
     jmp calc_n_loop_start
 
 eax_is_now_n:
@@ -38,7 +38,7 @@ n_loop_start:
 
 
     mov ebx, eax ;
-    inc ebx
+    add ebx, 1
     shl ebx, 2
     ; ebx = (eax+1) * sizeof(int)
 
@@ -82,7 +82,7 @@ digit_idx_loop_start:
     mov dword [edi+edx*4], ebx
     mov eax, dword [ebp-4]   ; RESTORE eax.
 
-    inc edx      ; digit_idx++
+    add edx, 1      ; digit_idx++
     mov ebx, dword [ebp-8] ; RESTORE ebx.
     cmp edx, ebx
     jne digit_idx_loop_start ; while (digit_idx != len)
@@ -95,7 +95,7 @@ while_r_loop:
     xor edx, edx
     div dword [ten_thousand]            ; edx = r % 10,000 ; r /= 10,000
     mov dword [edi+ebx*4], edx  ; result[len] = r % 10,000
-    inc ebx ; len++
+    add ebx, 1 ; len++
 
     jmp while_r_loop
 

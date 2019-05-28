@@ -1,6 +1,7 @@
 all: afact cfact
 
 cfact: fact.c
+	gcc -m32 -Wall -S -O2 $<
 	gcc -m32 -Wall -O2 -o $@ $<
 
 afact: fact.asm
