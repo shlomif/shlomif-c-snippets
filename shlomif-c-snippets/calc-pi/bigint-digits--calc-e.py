@@ -30,19 +30,27 @@ OTHER DEALINGS IN THE SOFTWARE.
 =cut
 """
 
+import argparse
 import sys
 
 from six import print_
 
+parser = argparse.ArgumentParser(
+    prog='calc-e',
+    formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+parser.add_argument('--iters', type=int, default=1000,
+                    help='The iterations count')
+args = parser.parse_args(sys.argv[1:])
+count = args.iters
 numer = 1
 denom = 1
 
-for i in range(1, 130+1):
+for i in range(1, count+1):
     if not i % 30:
         print_(i, file=sys.stderr)
     denom *= i
     numer = 1 + (numer * i)
 
-e = (numer * 10 ** 160) // denom
+e = (numer * 10 ** (count + 30)) // denom
 
 print_("e is {}.".format(e))
