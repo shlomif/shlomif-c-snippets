@@ -30,15 +30,19 @@ OTHER DEALINGS IN THE SOFTWARE.
 =cut
 """
 
+import sys
+
+from six import print_
+
 numer = 1
 denom = 1
 
 for i in range(1, 130+1):
     if not i % 30:
-        print(i)
+        print_(i, file=sys.stderr)
     denom *= i
     numer = 1 + (numer * i)
 
 e = (numer * 10 ** 160) // denom
 
-print("e is {}.".format(e))
+print_("e is {}.".format(e))
