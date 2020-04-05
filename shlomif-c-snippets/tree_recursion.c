@@ -7,13 +7,20 @@
 #include <stdio.h>
 
 typedef int myint;
-void recurse(myint *indices, const myint max_len, const myint reached)
+
+static char int2letter(const myint idx)
+{
+    return "abcdefghijklmnopqrstuvwxyz"[idx];
+}
+
+static void recurse(
+    myint *const indices, const myint max_len, const myint reached)
 {
     if (reached == max_len)
     {
         for (myint i = 0; i < reached; ++i)
         {
-            printf("%c", "abcdefghijklmnopqrstuvwxyz"[indices[i]]);
+            printf("%c", int2letter(indices[i]));
         }
         printf("\n");
         return;
