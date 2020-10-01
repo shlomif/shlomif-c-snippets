@@ -6,11 +6,15 @@
 all:
 
 mandel.exe: mandelbrot_set_render.cpp
-	g++ -Wall -Wextra -o $@ $<
+	g++ -O3 -march=native -fwhole-program -flto -Wall -Wextra -o $@ $<
 
 clean:
 	rm -f mandel.exe
 
+rebuild: clean mandel.exe
+
+run: rebuild
+	./mandel.exe
 
 # vim:ft=make
 #
