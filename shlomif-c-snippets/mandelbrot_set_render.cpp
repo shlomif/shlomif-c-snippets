@@ -27,9 +27,10 @@
 #include <stdio.h>
 
 const int MAX_TEST = 82;
-using complex = std::complex<double>;
+typedef long double coordtype;
+using complex = std::complex<coordtype>;
 
-int mandelbrot_val(double r, double i)
+int mandelbrot_val(coordtype r, coordtype i)
 {
     complex z(0, 0), c(r, i);
     for (int a = 1; a <= MAX_TEST; a++)
@@ -56,7 +57,7 @@ static mandelbrot_set_ret mandelbrot_set(int x1, int y1, int x2, int y2)
         perror("foo");
         return ret;
     }
-    double rdelta = 3.0 / (x2 - x1), idelta = 2.0 / (y2 - y1);
+    coordtype rdelta = 3.0 / (x2 - x1), idelta = 2.0 / (y2 - y1);
     unsigned y = y1, a;
     const int init_r = 2 * (x1 - x2) / 3;
     const int final_r = (x2 - x1) / 3;
@@ -107,7 +108,7 @@ int32_t main()
     initgraph(&gi, &gm, "c:\\tc\\bgi");
 #else
 #endif
-    auto ret = mandelbrot_set(0, 0, 1023, 768);
+    auto ret = mandelbrot_set(0, 0, 10230, 7680);
     char command[5000];
     const char *const bitmap_filename = "mandel.pgm";
     snprintf(command, 4800, "gm convert -depth 8 -size %dx%d+0 gray:%s %s",
