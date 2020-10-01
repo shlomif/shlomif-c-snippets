@@ -22,6 +22,7 @@
  */
 
 #include <complex.h>
+#define WITH_GRAPHICS 0
 #if WITH_GRAPHICS
 #include <graphics.h>
 #endif
@@ -31,7 +32,7 @@ const int MAX_TEST = 82;
 typedef long double coordtype;
 typedef std::complex<coordtype> complextype;
 
-int mandelbrot_val(coordtype r, coordtype i)
+static int mandelbrot_val(coordtype r, coordtype i)
 {
     complextype z(0, 0), c(r, i);
     for (int a = 1; a <= MAX_TEST; a++)
@@ -58,7 +59,7 @@ static mandelbrot_set_ret mandelbrot_set(int x1, int y1, int x2, int y2)
         perror("foo");
         return ret;
     }
-    coordtype rdelta = 3.0 / (x2 - x1), idelta = 2.0 / (y2 - y1);
+    coordtype rdelta = 3.0L / (x2 - x1), idelta = 2.0L / (y2 - y1);
 #if WITH_GRAPHICS
     unsigned y = y1;
 #endif
@@ -76,7 +77,7 @@ static mandelbrot_set_ret mandelbrot_set(int x1, int y1, int x2, int y2)
     {
         for (int r = init_r; r <= final_r; r++)
         {
-            auto a = mandelbrot_val(r * rdelta, i * idelta);
+            int a = mandelbrot_val(r * rdelta, i * idelta);
 #if 0
             if (a)
             {
@@ -113,7 +114,7 @@ int32_t main()
     initgraph(&gi, &gm, "c:\\tc\\bgi");
 #else
 #endif
-    auto ret = mandelbrot_set(0, 0, 10230, 7680);
+    mandelbrot_set_ret ret = mandelbrot_set(0, 0, 10230, 7680);
     char command[5000];
     const char *const bitmap_filename = "mandel.pgm";
     snprintf(command, 4800, "gm convert -depth 8 -size %dx%d+0 gray:%s %s",
