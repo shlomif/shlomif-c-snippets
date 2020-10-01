@@ -11,7 +11,10 @@ mandel.exe: mandelbrot_set_render.cpp
 clean:
 	rm -f mandel.exe
 
-rebuild: clean mandel.exe
+reformat:
+	clang-format -i mandelbrot_set_render.cpp
+
+rebuild: clean reformat mandel.exe
 
 run: rebuild
 	./mandel.exe

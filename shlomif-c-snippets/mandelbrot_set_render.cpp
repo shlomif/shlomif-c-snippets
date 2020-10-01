@@ -29,11 +29,11 @@
 
 const int MAX_TEST = 82;
 typedef long double coordtype;
-using complex = std::complex<coordtype>;
+typedef std::complex<coordtype> complextype;
 
 int mandelbrot_val(coordtype r, coordtype i)
 {
-    complex z(0, 0), c(r, i);
+    complextype z(0, 0), c(r, i);
     for (int a = 1; a <= MAX_TEST; a++)
     {
         z = z * z + c;
