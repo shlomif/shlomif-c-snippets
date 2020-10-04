@@ -52,6 +52,15 @@ typedef struct
     my_int_type i_height;
 } mandelbrot_set_ret;
 
+static inline void my_putpixel(
+    FILE *const f, const my_int_type x, const my_int_type y, const int val)
+{
+#if WITH_GRAPHICS
+    putpixel(x, y, val);
+#endif
+    putc(val, f);
+}
+
 static mandelbrot_set_ret mandelbrot_set(
     my_int_type x1, my_int_type y1, my_int_type x2, my_int_type y2)
 {
@@ -63,9 +72,7 @@ static mandelbrot_set_ret mandelbrot_set(
         return ret;
     }
     coordtype rdelta = 3.0L / (x2 - x1), idelta = 2.0L / (y2 - y1);
-#if WITH_GRAPHICS
-    unsigned y = y1;
-#endif
+    my_int_type y = y1;
     const my_int_type init_r = 2 * (x1 - x2) / 3;
     const my_int_type final_r = (x2 - x1) / 3;
     const my_int_type final_i = (y2 - y1) / 2;
@@ -79,6 +86,7 @@ static mandelbrot_set_ret mandelbrot_set(
     FILE *f = fopen(ret.filename, "wb");
     for (my_int_type i = init_i; i <= final_i; i++)
     {
+        my_int_type x = 0;
         for (my_int_type r = init_r; r <= final_r; r++)
         {
             my_int_type a = mandelbrot_val(r * rdelta, i * idelta);
@@ -91,17 +99,12 @@ static mandelbrot_set_ret mandelbrot_set(
             a = a * 255 / MAX_TEST;
 #endif
 
-#if WITH_GRAPHICS
-            putpixel(x++, y, a);
-#endif
-            putc((int)a, f);
+            my_putpixel(f, x++, y, (int)a);
 #ifdef DEBUG
             printf("pos = %ld\n", ftell(f));
 #endif
         }
-#if WITH_GRAPHICS
         y++;
-#endif
     }
     fclose(f);
     return ret;
