@@ -100,9 +100,6 @@ static mandelbrot_set_ret mandelbrot_set(
 #endif
 
             my_putpixel(f, x++, y, (int)a);
-#ifdef DEBUG
-            printf("pos = %ld\n", ftell(f));
-#endif
         }
         y++;
     }
