@@ -61,6 +61,16 @@ static inline void my_putpixel(
     putc(val, f);
 }
 
+static void fix_extent(my_int_type *final_r, const my_int_type init_r,
+    const my_int_type wanted_r_width)
+{
+    my_int_type r_width = *final_r - init_r + 1;
+    while (r_width < wanted_r_width)
+    {
+        *final_r += wanted_r_width - r_width;
+        r_width = *final_r - init_r + 1;
+    }
+}
 static mandelbrot_set_ret mandelbrot_set(
     my_int_type x1, my_int_type y1, my_int_type x2, my_int_type y2)
 {
@@ -71,34 +81,14 @@ static mandelbrot_set_ret mandelbrot_set(
     my_int_type final_r = (x2 - x1) / 3;
     my_int_type final_i = (y2 - y1) / 2;
     const my_int_type wanted_r_width = x2 - x1 + 1;
-    my_int_type r_width = final_r - init_r + 1;
-    while (r_width < wanted_r_width)
-    {
-        ++final_r;
-        r_width = final_r - init_r + 1;
-    }
-    while (r_width > wanted_r_width)
-    {
-        --final_r;
-        r_width = final_r - init_r + 1;
-    }
+    fix_extent(&final_r, init_r, wanted_r_width);
     const my_int_type init_i = ((y1 - y2) / 2);
     const my_int_type wanted_i_width = y2 - y1 + 1;
-    my_int_type i_width = final_i - init_i + 1;
-    while (i_width < wanted_i_width)
-    {
-        ++final_i;
-        i_width = final_i - init_i + 1;
-    }
-    while (i_width > wanted_i_width)
-    {
-        --final_i;
-        i_width = final_i - init_i + 1;
-    }
+    fix_extent(&final_i, init_i, wanted_i_width);
     ret.r_width = wanted_r_width;
     ret.i_height = wanted_i_width;
-    snprintf(ret.filename, 3000, "f_rw=%lu_iw=%lu.img", (unsigned long)r_width,
-        (unsigned long)i_width);
+    snprintf(ret.filename, 3000, "f_rw=%lu_iw=%lu.img",
+        (unsigned long)ret.r_width, (unsigned long)ret.i_height);
     FILE *f = fopen(ret.filename, "wb");
     for (my_int_type i = init_i; i <= final_i; i++)
     {
