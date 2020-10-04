@@ -65,22 +65,38 @@ static mandelbrot_set_ret mandelbrot_set(
     my_int_type x1, my_int_type y1, my_int_type x2, my_int_type y2)
 {
     mandelbrot_set_ret ret;
-    if (((x2 - x1) % 3 != 0) || ((y2 - y1) % 2 == 1) || (x2 - x1 < 10) ||
-        (y2 - y1 < 10))
-    {
-        perror("foo");
-        return ret;
-    }
     coordtype rdelta = 3.0L / (x2 - x1), idelta = 2.0L / (y2 - y1);
     my_int_type y = y1;
     const my_int_type init_r = 2 * (x1 - x2) / 3;
-    const my_int_type final_r = (x2 - x1) / 3;
-    const my_int_type final_i = (y2 - y1) / 2;
-    const my_int_type r_width = final_r - init_r + 1;
+    my_int_type final_r = (x2 - x1) / 3;
+    my_int_type final_i = (y2 - y1) / 2;
+    const my_int_type wanted_r_width = x2 - x1 + 1;
+    my_int_type r_width = final_r - init_r + 1;
+    while (r_width < wanted_r_width)
+    {
+        ++final_r;
+        r_width = final_r - init_r + 1;
+    }
+    while (r_width > wanted_r_width)
+    {
+        --final_r;
+        r_width = final_r - init_r + 1;
+    }
     const my_int_type init_i = ((y1 - y2) / 2);
-    const my_int_type i_width = final_i - init_i + 1;
-    ret.r_width = r_width;
-    ret.i_height = i_width;
+    const my_int_type wanted_i_width = y2 - y1 + 1;
+    my_int_type i_width = final_i - init_i + 1;
+    while (i_width < wanted_i_width)
+    {
+        ++final_i;
+        i_width = final_i - init_i + 1;
+    }
+    while (i_width > wanted_i_width)
+    {
+        --final_i;
+        i_width = final_i - init_i + 1;
+    }
+    ret.r_width = wanted_r_width;
+    ret.i_height = wanted_i_width;
     snprintf(ret.filename, 3000, "f_rw=%lu_iw=%lu.img", (unsigned long)r_width,
         (unsigned long)i_width);
     FILE *f = fopen(ret.filename, "wb");
@@ -118,7 +134,7 @@ int32_t main()
     initgraph(&gi, &gm, "c:\\tc\\bgi");
 #else
 #endif
-    mandelbrot_set_ret ret = mandelbrot_set(0, 0, 10230, 7680);
+    mandelbrot_set_ret ret = mandelbrot_set(0, 0, 10229, 7679);
     char command[5000];
     const char *const bitmap_filename = "mandel.pgm";
     snprintf(command, 4800, "gm convert -depth 8 -size %lux%lu+0 gray:%s %s",
