@@ -29,6 +29,12 @@
 #include <stdint.h>
 #include <stdio.h>
 
+#if defined(__GNUC__)
+#define GCC_UNUSED __attribute__((unused))
+#else
+#define GCC_UNUSED
+#endif
+
 typedef int_fast32_t my_int_type;
 const my_int_type MAX_TEST = 82;
 typedef long double coordtype;
@@ -52,8 +58,8 @@ typedef struct
     my_int_type i_height;
 } mandelbrot_set_ret;
 
-static inline void my_putpixel(
-    FILE *const f, const my_int_type x, const my_int_type y, const int val)
+static inline void my_putpixel(FILE *const f, const my_int_type x GCC_UNUSED,
+    const my_int_type y GCC_UNUSED, const int val)
 {
 #if WITH_GRAPHICS
     putpixel(x, y, val);
@@ -88,7 +94,8 @@ static mandelbrot_set_ret mandelbrot_set(
     ret.r_width = wanted_r_width;
     ret.i_height = wanted_i_width;
     snprintf(ret.filename, 3000, "f_rw=%lu_iw=%lu.img",
-        (unsigned long)ret.r_width, (unsigned long)ret.i_height);
+        static_cast<unsigned long>(ret.r_width),
+        static_cast<unsigned long>(ret.i_height));
     FILE *f = fopen(ret.filename, "wb");
     for (my_int_type i = init_i; i <= final_i; i++)
     {
@@ -105,7 +112,7 @@ static mandelbrot_set_ret mandelbrot_set(
             a = a * 255 / MAX_TEST;
 #endif
 
-            my_putpixel(f, x++, y, (int)a);
+            my_putpixel(f, x++, y, static_cast<int>(a));
         }
         y++;
     }
@@ -128,7 +135,8 @@ int32_t main()
     char command[5000];
     const char *const bitmap_filename = "mandel.pgm";
     snprintf(command, 4800, "gm convert -depth 8 -size %lux%lu+0 gray:%s %s",
-        (unsigned long)ret.r_width, (unsigned long)ret.i_height, ret.filename,
+        static_cast<unsigned long>(ret.r_width),
+        static_cast<unsigned long>(ret.i_height), ret.filename,
         bitmap_filename);
     system(command);
     snprintf(command, 4800, "gwenview %s", bitmap_filename);
