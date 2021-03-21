@@ -61,9 +61,6 @@ typedef struct
 static inline void my_putpixel(FILE *const f, const my_int_type x GCC_UNUSED,
     const my_int_type y GCC_UNUSED, const int val)
 {
-#if WITH_GRAPHICS
-    putpixel(x, y, val);
-#endif
     putc(val, f);
 }
 
@@ -103,15 +100,7 @@ static mandelbrot_set_ret mandelbrot_set(
         for (my_int_type r = init_r; r <= final_r; r++)
         {
             my_int_type a = mandelbrot_val(r * rdelta, i * idelta);
-#if 0
-            if (a)
-            {
-                a = (a >> 2) + 32;
-            }
-#else
             a = a * 255 / MAX_TEST;
-#endif
-
             my_putpixel(f, x++, y, static_cast<int>(a));
         }
         y++;
@@ -120,17 +109,8 @@ static mandelbrot_set_ret mandelbrot_set(
     return ret;
 }
 
-#if WITH_GRAPHICS
-int return0() { return 0; }
-#endif
-
-int32_t main()
+int main()
 {
-#if WITH_GRAPHICS
-    int gi = installuserdriver("Svga256", return0), gm = 0; // SVGA1024x768x256;
-    initgraph(&gi, &gm, "c:\\tc\\bgi");
-#else
-#endif
     mandelbrot_set_ret ret = mandelbrot_set(0, 0, 10229, 7679);
     char command[5000];
     const char *const bitmap_filename = "mandel.pgm";
