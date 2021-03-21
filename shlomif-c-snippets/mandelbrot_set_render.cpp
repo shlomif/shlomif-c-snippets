@@ -43,7 +43,7 @@ typedef std::complex<coordtype> complextype;
 static my_int_type mandelbrot_val(coordtype r, coordtype i)
 {
     complextype z(0, 0), c(r, i);
-    for (my_int_type a = 0; a < MAX_TEST; a++)
+    for (my_int_type a = 0; a < MAX_TEST; ++a)
     {
         z = z * z + c;
         if (norm(z) >= 4)
@@ -51,6 +51,7 @@ static my_int_type mandelbrot_val(coordtype r, coordtype i)
     }
     return MAX_TEST;
 }
+
 typedef struct
 {
     char filename[4000];
@@ -94,16 +95,16 @@ static mandelbrot_set_ret mandelbrot_set(
         static_cast<unsigned long>(ret.r_width),
         static_cast<unsigned long>(ret.i_height));
     FILE *f = fopen(ret.filename, "wb");
-    for (my_int_type i = init_i; i <= final_i; i++)
+    for (my_int_type i = init_i; i <= final_i; ++i)
     {
         my_int_type x = 0;
-        for (my_int_type r = init_r; r <= final_r; r++)
+        for (my_int_type r = init_r; r <= final_r; ++r)
         {
             my_int_type a = mandelbrot_val(r * rdelta, i * idelta);
             a = a * 255 / MAX_TEST;
             my_putpixel(f, x++, y, static_cast<int>(a));
         }
-        y++;
+        ++y;
     }
     fclose(f);
     return ret;
