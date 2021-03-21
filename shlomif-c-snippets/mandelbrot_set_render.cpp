@@ -112,7 +112,8 @@ static mandelbrot_set_ret mandelbrot_set(
 
 int main()
 {
-    mandelbrot_set_ret ret = mandelbrot_set(0, 0, 10229, 7679);
+    // mandelbrot_set_ret ret = mandelbrot_set(0, 0, 10229, 7679);
+    mandelbrot_set_ret ret = mandelbrot_set(0, 0, 1919, 1079);
     char command[5000];
     const char *const bitmap_filename = "mandel.pgm";
     snprintf(command, 4800, "gm convert -depth 8 -size %lux%lu+0 gray:%s %s",
