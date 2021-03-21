@@ -40,7 +40,7 @@ const my_int_type MAX_TEST = 82;
 typedef long double coordtype;
 typedef std::complex<coordtype> complextype;
 
-static my_int_type mandelbrot_val(coordtype r, coordtype i)
+static my_int_type mandelbrot_val(const coordtype r, const coordtype i)
 {
     complextype z(0, 0), c(r, i);
     for (my_int_type a = 0; a < MAX_TEST; ++a)
@@ -75,10 +75,12 @@ static void fix_extent(my_int_type *final_r, const my_int_type init_r,
         r_width = *final_r - init_r + 1;
     }
 }
+
 static mandelbrot_set_ret mandelbrot_set(
     my_int_type x1, my_int_type y1, my_int_type x2, my_int_type y2)
 {
     mandelbrot_set_ret ret;
+
     coordtype rdelta = 3.0L / (x2 - x1), idelta = 2.0L / (y2 - y1);
     my_int_type y = y1;
     const my_int_type init_r = 2 * (x1 - x2) / 3;
