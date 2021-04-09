@@ -29,6 +29,9 @@
 #include <stdint.h>
 #include <stdio.h>
 
+#include <apr_general.h>
+#include <apr_getopt.h>
+
 #if defined(__GNUC__)
 #define GCC_UNUSED __attribute__((unused))
 #else
@@ -112,8 +115,44 @@ static mandelbrot_set_ret mandelbrot_set(
     return ret;
 }
 
-int main()
+int main(int argc, char *argv[])
 {
+    apr_getopt_t *os = NULL;
+    apr_pool_t *cont = NULL;
+    apr_initialize();
+    apr_pool_create(&cont, NULL);
+    apr_getopt_init(&os, cont, argc, argv);
+    const apr_getopt_option_t opts[] = {
+        {
+            "height",
+            1,
+            1,
+        },
+        {
+            "width",
+            2,
+            1,
+        },
+        {
+            "",
+            0,
+            0,
+        },
+    };
+    const char *arg;
+    int option_ch;
+    my_int_type height = 1080, width = 1920;
+    while (APR_SUCCESS == apr_getopt_long(os, opts, &option_ch, &arg))
+    {
+        if (option_ch == 1)
+        {
+            height = atoi(arg);
+        }
+        else if (option_ch == 2)
+        {
+            width = atoi(arg);
+        }
+    }
     // mandelbrot_set_ret ret = mandelbrot_set(0, 0, 10229, 7679);
     mandelbrot_set_ret ret = mandelbrot_set(0, 0, 1919, 1079);
     char command[5000];
@@ -125,5 +164,6 @@ int main()
     system(command);
     snprintf(command, 4800, "gwenview %s", bitmap_filename);
     system(command);
+    apr_terminate();
     return 0;
 }
