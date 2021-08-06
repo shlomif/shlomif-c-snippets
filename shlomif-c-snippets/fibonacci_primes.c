@@ -26,15 +26,15 @@ static bool is_prime(const myint n)
 
 int main(void)
 {
-    myint curr = 0, next = 1, temp;
+    myint curr = 0, next = 1;
 
     while (curr >= 0)
     {
         printf("%lld (%s)\n", curr, (is_prime(curr) ? "prime" : "not prime"));
         fflush(stdout);
-        temp = next + curr;
+        const myint nextnext = next + curr;
         curr = next;
-        next = temp;
+        next = nextnext;
     }
 
     return 0;
