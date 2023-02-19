@@ -159,14 +159,14 @@ int main(int argc, char *argv[])
     // mandelbrot_set_ret ret = mandelbrot_set(0, 0, 10229, 7679);
     // mandelbrot_set_ret ret = mandelbrot_set(0, 0, 1919, 1079);
     mandelbrot_set_ret ret = mandelbrot_set(0, 0, width - 1, height - 1);
-    char command[5000];
+    char command[1000];
     const char *const bitmap_filename = "mandel.bmp";
-    snprintf(command, 4800, "gm convert -depth 8 -size %lux%lu+0 gray:%s %s",
+    snprintf(command, 800, "gm convert -depth 8 -size %lux%lu+0 gray:%s %s",
         static_cast<unsigned long>(ret.r_width),
         static_cast<unsigned long>(ret.i_height), ret.filename,
         bitmap_filename);
     system(command);
-    snprintf(command, 4800, "gwenview %s", bitmap_filename);
+    snprintf(command, 800, "gwenview %s", bitmap_filename);
     system(command);
     apr_terminate();
     return 0;
