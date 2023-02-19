@@ -117,21 +117,26 @@ static mandelbrot_set_ret mandelbrot_set(
 
 int main(int argc, char *argv[])
 {
-    apr_getopt_t *os = NULL;
+    apr_getopt_t *getopt_handle = NULL;
     apr_pool_t *cont = NULL;
     apr_initialize();
     apr_pool_create(&cont, NULL);
-    apr_getopt_init(&os, cont, argc, argv);
+    apr_getopt_init(&getopt_handle, cont, argc, argv);
+    enum
+    {
+        OPT_HEIGHT = 1,
+        OPT_WIDTH = 2,
+    };
     const apr_getopt_option_t opts[] = {
         {
             "height",
-            256,
+            OPT_HEIGHT,
             TRUE,
             "height",
         },
         {
             "width",
-            256,
+            OPT_WIDTH,
             TRUE,
             "width",
         },
@@ -145,13 +150,14 @@ int main(int argc, char *argv[])
     const char *arg;
     int option_ch;
     my_int_type height = 1080, width = 1920;
-    while (APR_SUCCESS == apr_getopt_long(os, opts, &option_ch, &arg))
+    while (
+        APR_SUCCESS == apr_getopt_long(getopt_handle, opts, &option_ch, &arg))
     {
-        if (option_ch == 1)
+        if (option_ch == OPT_HEIGHT)
         {
             height = atoi(arg);
         }
-        else if (option_ch == 2)
+        else if (option_ch == OPT_WIDTH)
         {
             width = atoi(arg);
         }
