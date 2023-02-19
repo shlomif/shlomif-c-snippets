@@ -125,18 +125,21 @@ int main(int argc, char *argv[])
     const apr_getopt_option_t opts[] = {
         {
             "height",
-            1,
-            1,
+            256,
+            TRUE,
+            "height",
         },
         {
             "width",
-            2,
-            1,
+            256,
+            TRUE,
+            "width",
         },
         {
             "",
             0,
             0,
+            "",
         },
     };
     const char *arg;
