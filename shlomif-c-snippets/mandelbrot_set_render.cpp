@@ -45,7 +45,8 @@ typedef std::complex<coordtype> complextype;
 
 static my_int_type mandelbrot_val(const coordtype r, const coordtype i)
 {
-    complextype z(0, 0), c(r, i);
+    const complextype c(r, i);
+    complextype z(0, 0);
     for (my_int_type a = 0; a < MAX_TEST; ++a)
     {
         z = z * z + c;
