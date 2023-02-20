@@ -106,7 +106,7 @@ static mandelbrot_set_ret mandelbrot_set(
         my_int_type x = 0;
         for (my_int_type r = init_r; r <= final_r; ++r)
         {
-            my_int_type a = mandelbrot_val(r * rdelta, i * idelta);
+            const my_int_type a = mandelbrot_val(r * rdelta, i * idelta);
             my_putpixel(f, x++, y, static_cast<int>(a * 255 / MAX_TEST));
         }
         ++y;
