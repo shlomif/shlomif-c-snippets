@@ -22,10 +22,6 @@
  */
 
 #include <complex.h>
-#define WITH_GRAPHICS 0
-#if WITH_GRAPHICS
-#include <graphics.h>
-#endif
 #include <stdint.h>
 #include <stdio.h>
 
@@ -62,7 +58,7 @@ typedef struct
     char filename[FILENAME_SIZE + 2];
     my_int_type r_width;
     my_int_type i_height;
-} mandelbrot_set_ret;
+} mandel__ret_data;
 
 static inline void my_putpixel(FILE *const f, const my_int_type x GCC_UNUSED,
     const my_int_type y GCC_UNUSED, const int val)
@@ -81,10 +77,10 @@ static void fix_extent(my_int_type *final_r, const my_int_type init_r,
     }
 }
 
-static mandelbrot_set_ret mandelbrot_set(
+static mandel__ret_data generate_mandelbrot_set(
     my_int_type x1, my_int_type y1, my_int_type x2, my_int_type y2)
 {
-    mandelbrot_set_ret ret;
+    mandel__ret_data ret;
 
     coordtype rdelta = 3.0L / (x2 - x1), idelta = 2.0L / (y2 - y1);
     my_int_type y = y1;
@@ -163,9 +159,10 @@ int main(int argc, char *argv[])
             width = atoi(arg);
         }
     }
-    // mandelbrot_set_ret ret = mandelbrot_set(0, 0, 10229, 7679);
-    // mandelbrot_set_ret ret = mandelbrot_set(0, 0, 1919, 1079);
-    mandelbrot_set_ret ret = mandelbrot_set(0, 0, width - 1, height - 1);
+    // mandel__ret_data ret = generate_mandelbrot_set(0, 0, 10229, 7679);
+    // mandel__ret_data ret = generate_mandelbrot_set(0, 0, 1919, 1079);
+    const mandel__ret_data ret =
+        generate_mandelbrot_set(0, 0, width - 1, height - 1);
     char command[1000];
     const char *const bitmap_filename = "mandel.bmp";
     snprintf(command, 800, "gm convert -depth 8 -size %lux%lu+0 gray:%s %s",
