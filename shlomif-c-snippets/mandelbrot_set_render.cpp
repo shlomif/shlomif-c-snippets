@@ -119,10 +119,10 @@ static mandelbrot_set_ret mandelbrot_set(
 int main(int argc, char *argv[])
 {
     apr_getopt_t *getopt_handle = NULL;
-    apr_pool_t *cont = NULL;
+    apr_pool_t *my_pool = NULL;
     apr_initialize();
-    apr_pool_create(&cont, NULL);
-    apr_getopt_init(&getopt_handle, cont, argc, argv);
+    apr_pool_create(&my_pool, NULL);
+    apr_getopt_init(&getopt_handle, my_pool, argc, argv);
     enum
     {
         OPT_HEIGHT = 1,
