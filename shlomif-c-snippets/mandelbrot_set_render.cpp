@@ -86,8 +86,6 @@ static inline void init_mymap()
 static mandel__ret_data generate_mandelbrot_set(
     my_int_type x1, my_int_type y1, my_int_type x2, my_int_type y2)
 {
-    mandel__ret_data ret;
-
     coordtype rdelta = 3.0L / (x2 - x1), idelta = 2.0L / (y2 - y1);
     const my_int_type init_r = 2 * (x1 - x2) / 3;
     my_int_type final_r = (x2 - x1) / 3;
@@ -97,6 +95,8 @@ static mandel__ret_data generate_mandelbrot_set(
     const my_int_type init_i = ((y1 - y2) / 2);
     const my_int_type wanted_i_width = y2 - y1 + 1;
     fix_extent(&final_i, init_i, wanted_i_width);
+
+    mandel__ret_data ret;
     ret.r_width = wanted_r_width;
     ret.i_height = wanted_i_width;
     snprintf(ret.filename, FILENAME_SIZE, "f_rw=%lu_iw=%lu.img",
@@ -113,6 +113,7 @@ static mandel__ret_data generate_mandelbrot_set(
         }
     }
     fclose(f);
+
     return ret;
 }
 
