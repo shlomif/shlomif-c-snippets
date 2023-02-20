@@ -60,11 +60,7 @@ typedef struct
     my_int_type i_height;
 } mandel__ret_data;
 
-static inline void my_putpixel(FILE *const f, const my_int_type x GCC_UNUSED,
-    const my_int_type y GCC_UNUSED, const int val)
-{
-    putc(val, f);
-}
+static inline void my_putpixel(FILE *const f, const int val) { putc(val, f); }
 
 static void fix_extent(my_int_type *final_r, const my_int_type init_r,
     const my_int_type wanted_r_width)
@@ -83,7 +79,6 @@ static mandel__ret_data generate_mandelbrot_set(
     mandel__ret_data ret;
 
     coordtype rdelta = 3.0L / (x2 - x1), idelta = 2.0L / (y2 - y1);
-    my_int_type y = y1;
     const my_int_type init_r = 2 * (x1 - x2) / 3;
     my_int_type final_r = (x2 - x1) / 3;
     my_int_type final_i = (y2 - y1) / 2;
@@ -100,13 +95,11 @@ static mandel__ret_data generate_mandelbrot_set(
     FILE *f = fopen(ret.filename, "wb");
     for (my_int_type i = init_i; i <= final_i; ++i)
     {
-        my_int_type x = 0;
         for (my_int_type r = init_r; r <= final_r; ++r)
         {
             const my_int_type a = mandelbrot_val(r * rdelta, i * idelta);
-            my_putpixel(f, x++, y, static_cast<int>(a * 255 / MAX_TEST));
+            my_putpixel(f, static_cast<int>(a * 255 / MAX_TEST));
         }
-        ++y;
     }
     fclose(f);
     return ret;
