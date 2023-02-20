@@ -92,13 +92,19 @@ static mandel__ret_data generate_mandelbrot_set(
     snprintf(ret.filename, FILENAME_SIZE, "f_rw=%lu_iw=%lu.img",
         static_cast<unsigned long>(ret.r_width),
         static_cast<unsigned long>(ret.i_height));
+    int mymap[MAX_TEST + 1];
+    for (my_int_type i = 0; i <= MAX_TEST; i++)
+    {
+        mymap[i] = static_cast<int>(i * 255 / MAX_TEST);
+    }
+
     FILE *f = fopen(ret.filename, "wb");
     for (my_int_type i = init_i; i <= final_i; ++i)
     {
         for (my_int_type r = init_r; r <= final_r; ++r)
         {
             const my_int_type a = mandelbrot_val(r * rdelta, i * idelta);
-            my_putpixel(f, static_cast<int>(a * 255 / MAX_TEST));
+            my_putpixel(f, mymap[a]);
         }
     }
     fclose(f);
