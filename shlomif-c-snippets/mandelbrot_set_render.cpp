@@ -73,6 +73,16 @@ static void fix_extent(my_int_type *final_r, const my_int_type init_r,
     }
 }
 
+static int mymap[MAX_TEST + 1];
+
+static inline void init_mymap()
+{
+    for (my_int_type i = 0; i <= MAX_TEST; i++)
+    {
+        mymap[i] = static_cast<int>(i * 255 / MAX_TEST);
+    }
+}
+
 static mandel__ret_data generate_mandelbrot_set(
     my_int_type x1, my_int_type y1, my_int_type x2, my_int_type y2)
 {
@@ -92,11 +102,6 @@ static mandel__ret_data generate_mandelbrot_set(
     snprintf(ret.filename, FILENAME_SIZE, "f_rw=%lu_iw=%lu.img",
         static_cast<unsigned long>(ret.r_width),
         static_cast<unsigned long>(ret.i_height));
-    int mymap[MAX_TEST + 1];
-    for (my_int_type i = 0; i <= MAX_TEST; i++)
-    {
-        mymap[i] = static_cast<int>(i * 255 / MAX_TEST);
-    }
 
     FILE *f = fopen(ret.filename, "wb");
     for (my_int_type i = init_i; i <= final_i; ++i)
@@ -115,6 +120,7 @@ int main(int argc, char *argv[])
 {
     apr_getopt_t *getopt_handle = NULL;
     apr_pool_t *my_pool = NULL;
+    init_mymap();
     apr_initialize();
     apr_pool_create(&my_pool, NULL);
     apr_getopt_init(&getopt_handle, my_pool, argc, argv);
