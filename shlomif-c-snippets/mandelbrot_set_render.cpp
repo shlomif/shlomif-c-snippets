@@ -55,9 +55,10 @@ static my_int_type mandelbrot_val(const coordtype r, const coordtype i)
     return MAX_TEST;
 }
 
+#define FILENAME_SIZE 198
 typedef struct
 {
-    char filename[4000];
+    char filename[FILENAME_SIZE + 2];
     my_int_type r_width;
     my_int_type i_height;
 } mandelbrot_set_ret;
@@ -96,7 +97,7 @@ static mandelbrot_set_ret mandelbrot_set(
     fix_extent(&final_i, init_i, wanted_i_width);
     ret.r_width = wanted_r_width;
     ret.i_height = wanted_i_width;
-    snprintf(ret.filename, 3000, "f_rw=%lu_iw=%lu.img",
+    snprintf(ret.filename, FILENAME_SIZE, "f_rw=%lu_iw=%lu.img",
         static_cast<unsigned long>(ret.r_width),
         static_cast<unsigned long>(ret.i_height));
     FILE *f = fopen(ret.filename, "wb");
@@ -125,7 +126,7 @@ int main(int argc, char *argv[])
     enum
     {
         OPT_HEIGHT = 1,
-        OPT_WIDTH = 2,
+        OPT_WIDTH
     };
     const apr_getopt_option_t opts[] = {
         {
