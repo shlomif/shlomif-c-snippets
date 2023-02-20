@@ -120,10 +120,12 @@ int main(int argc, char *argv[])
 {
     apr_getopt_t *getopt_handle = NULL;
     apr_pool_t *my_pool = NULL;
+
     init_mymap();
     apr_initialize();
     apr_pool_create(&my_pool, NULL);
     apr_getopt_init(&getopt_handle, my_pool, argc, argv);
+
     enum
     {
         OPT_HEIGHT = 1,
@@ -149,6 +151,7 @@ int main(int argc, char *argv[])
             "",
         },
     };
+
     const char *arg;
     int option_ch;
     my_int_type height = 1080, width = 1920;
@@ -164,10 +167,10 @@ int main(int argc, char *argv[])
             width = atoi(arg);
         }
     }
-    // mandel__ret_data ret = generate_mandelbrot_set(0, 0, 10229, 7679);
-    // mandel__ret_data ret = generate_mandelbrot_set(0, 0, 1919, 1079);
+
     const mandel__ret_data ret =
         generate_mandelbrot_set(0, 0, width - 1, height - 1);
+
     char command[1000];
     const char *const bitmap_filename = "mandel.bmp";
     snprintf(command, 800, "gm convert -depth 8 -size %lux%lu+0 gray:%s %s",
@@ -175,8 +178,11 @@ int main(int argc, char *argv[])
         static_cast<unsigned long>(ret.i_height), ret.filename,
         bitmap_filename);
     system(command);
+
     snprintf(command, 800, "gwenview %s", bitmap_filename);
     system(command);
+
     apr_terminate();
+
     return 0;
 }
