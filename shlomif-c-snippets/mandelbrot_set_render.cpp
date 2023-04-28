@@ -46,16 +46,17 @@ static my_int_type mandelbrot_val(const coordtype r, const coordtype i)
     for (my_int_type a = 0; a < MAX_TEST; ++a)
     {
         z = z * z + c;
-        if (norm(z) >= 4)
+        if (norm(z) >= 4.0)
             return a;
     }
     return MAX_TEST;
 }
 
 #define FILENAME_SIZE 198
+#define FILENAME_SIZE_MARGIN 2
 typedef struct
 {
-    char filename[FILENAME_SIZE + 2];
+    char filename[FILENAME_SIZE + FILENAME_SIZE_MARGIN];
     my_int_type r_width;
     my_int_type i_height;
 } mandel__ret_data;
