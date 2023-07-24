@@ -8,7 +8,7 @@ my $base = 10000;
 sub add_multi_digit
 {
     my ($one, $two) = @_;
-    my ($min_len, $max_len, @result, $a, $sum, $temp);
+    my ($min_len, $max_len, @result, $ii, $sum, $temp);
     if (scalar(@{$one}) > scalar(@{$two}))
     {
         $max_len = scalar(@{$one});
@@ -23,28 +23,28 @@ sub add_multi_digit
         $two = $temp;
     }
 
-    for($a=0;$a<$max_len+1;$a++)
+    for($ii=0;$ii<$max_len+1;++$ii)
     {
-        $result[$a] = 0;
+        $result[$ii] = 0;
     }
-    for($a=0;$a<$min_len;$a++)
+    for($ii=0;$ii<$min_len;++$ii)
     {
-        $sum = $one->[$a] + $two->[$a] + $result[$a];
-        $result[$a] = $sum % $base;
-        $result[$a+1] = int ($sum / $base);
+        $sum = $one->[$ii] + $two->[$ii] + $result[$ii];
+        $result[$ii] = $sum % $base;
+        $result[$ii+1] = int ($sum / $base);
     }
-    for(;$a<$max_len;$a++)
+    for(;$ii<$max_len;++$ii)
     {
-        $sum = $one->[$a] + $result[$a];
-        $result[$a] = $sum % $base;
-        $result[$a+1] = int ($sum / $base);
+        $sum = $one->[$ii] + $result[$ii];
+        $result[$ii] = $sum % $base;
+        $result[$ii+1] = int ($sum / $base);
     }
 
-    for($a=scalar(@result)-1;$a>=1;$a--)
+    for($ii=scalar(@result)-1;$ii>=1;--$ii)
     {
-        last if ($result[$a] != 0)
+        last if ($result[$ii] != 0)
     }
-    @result = @result[0..$a];
+    @result = @result[0..$ii];
 
     return \@result;
 }
@@ -52,7 +52,7 @@ sub add_multi_digit
 sub subtract_multi_digit
 {
     my ($one, $two) = @_;
-    my ($min_len, $max_len, @result, $a, $diff);
+    my ($min_len, $max_len, @result, $ii, $diff);
     if (scalar(@{$one}) > scalar(@{$two}))
     {
         $max_len = scalar(@{$one});
@@ -64,37 +64,37 @@ sub subtract_multi_digit
         $max_len = scalar(@{$two});
     }
 
-    for($a=0;$a<$max_len;$a++)
+    for($ii=0;$ii<$max_len;++$ii)
     {
-        $result[$a] = 0;
+        $result[$ii] = 0;
     }
-    for($a=0;$a<$max_len;$a++)
+    for($ii=0;$ii<$max_len;++$ii)
     {
-        $diff = $result[$a];
-        if (scalar(@{$one}) > $a)
+        $diff = $result[$ii];
+        if (scalar(@{$one}) > $ii)
         {
-            $diff += $one->[$a];
+            $diff += $one->[$ii];
         }
-        if (scalar(@{$two}) > $a)
+        if (scalar(@{$two}) > $ii)
         {
-            $diff -= $two->[$a];
+            $diff -= $two->[$ii];
         }
         if ($diff >= 0)
         {
-            $result[$a] = $diff;
+            $result[$ii] = $diff;
         }
         else
         {
-            $result[$a] = $diff+$base;
-            $result[$a+1] = -1;
+            $result[$ii] = $diff+$base;
+            $result[$ii+1] = -1;
         }
     }
 
-    for($a=scalar(@result)-1;$a>=1;$a--)
+    for($ii=scalar(@result)-1;$ii>=1;--$ii)
     {
-        last if ($result[$a] != 0);
+        last if ($result[$ii] != 0);
     }
-    @result = @result[0..$a];
+    @result = @result[0..$ii];
 
 
     return \@result;
@@ -103,26 +103,26 @@ sub subtract_multi_digit
 sub multiply_multi_digit
 {
     my ($one, $two) = @_;
-    my (@result, $a, $b, $product, $c);
-    for($a=0;$a<scalar(@{$one})+scalar(@{$two});$a++)
+    my (@result, $ii, $b, $product, $c);
+    for($ii=0;$ii<scalar(@{$one})+scalar(@{$two});++$ii)
     {
-        $result[$a]=0;
+        $result[$ii]=0;
     }
-    for($a=0;$a<scalar(@{$one});$a++)
+    for($ii=0;$ii<scalar(@{$one});++$ii)
     {
         for($b=0;$b<scalar(@{$two});$b++)
         {
-            $product = $one->[$a] * $two->[$b];
-            $result[$a+$b] += $product % $base;
-            for($c=$a+$b;$result[$c]>=$base;$c++)
+            $product = $one->[$ii] * $two->[$b];
+            $result[$ii+$b] += $product % $base;
+            for($c=$ii+$b;$result[$c]>=$base;$c++)
             {
                 $result[$c+1] += int ($result[$c] / $base);
                 $result[$c] %= $base;
             }
             if (int ($product / $base) > 0)
             {
-                $result[$a+$b+1] += int ($product / $base);
-                for($c=$a+$b+1;$result[$c]>=$base;$c++)
+                $result[$ii+$b+1] += int ($product / $base);
+                for($c=$ii+$b+1;$result[$c]>=$base;$c++)
                 {
                     $result[$c+1] += int ($result[$c] / $base);
                     $result[$c] %= $base;
@@ -131,11 +131,11 @@ sub multiply_multi_digit
         }
     }
 
-    for($a=scalar(@result)-1;$a>=1;$a--)
+    for($ii=scalar(@result)-1;$ii>=1;--$ii)
     {
-        last if ($result[$a] != 0);
+        last if ($result[$ii] != 0);
     }
-    @result = @result[0..$a];
+    @result = @result[0..$ii];
 
     return \@result;
 }
@@ -144,21 +144,21 @@ sub divide_multi_digit
 {
     my ($divide, $div_by) = @_;
     $divide = [ @{$divide} ]; # clone it because we are going to change it
-    my (@result, $a, $d_digit, $db_digit, $offset, $multiply_by, @product);
+    my (@result, $ii, $d_digit, $db_digit, $offset, $multiply_by, @product);
 
     $result[0] = 0;
-    for($a=0;$a < scalar(@{$divide})-scalar(@{$div_by})+1; $a++)
+    for($ii=0;$ii < scalar(@{$divide})-scalar(@{$div_by})+1; ++$ii)
     {
-        $result[$a] = 0;
+        $result[$ii] = 0;
     }
 
     $d_digit = scalar(@{$divide})-1;
     $db_digit = -1;
-    for($a=scalar(@{$div_by})-1;$a>=0;$a--)
+    for($ii=scalar(@{$div_by})-1;$ii>=0;--$ii)
     {
-        if ($div_by->[$a] > 0)
+        if ($div_by->[$ii] > 0)
         {
-            $db_digit = $a;
+            $db_digit = $ii;
             last;
         }
     }
@@ -174,22 +174,22 @@ sub divide_multi_digit
             $d_digit = $#$divide;
         }
         # Check if the division can be ended
-        for($a=$d_digit, $d_digit = -1;$a>=0;$a--)
+        for($ii=$d_digit, $d_digit = -1;$ii>=0;--$ii)
         {
-            if ($divide->[$a] > 0)
+            if ($divide->[$ii] > 0)
             {
-                $d_digit = $a;
+                $d_digit = $ii;
                 last;
             }
         }
 
         if ($db_digit > $d_digit)
         {
-            for($a=scalar(@result)-1;$a>=1;$a--)
+            for($ii=scalar(@result)-1;$ii>=1;--$ii)
             {
-                last if ($result[$a] != 0);
+                last if ($result[$ii] != 0);
             }
-            @result = @result[0..$a];
+            @result = @result[0..$ii];
 
 
             return \@result;
@@ -198,19 +198,19 @@ sub divide_multi_digit
 
         if ($db_digit == $d_digit)
         {
-            for($a=$d_digit;$a>=0;$a--)
+            for($ii=$d_digit;$ii>=0;--$ii)
             {
-                if ($div_by->[$a] > $divide->[$a])
+                if ($div_by->[$ii] > $divide->[$ii])
                 {
-                    for($a=scalar(@result)-1;$a>=1;$a--)
+                    for($ii=scalar(@result)-1;$ii>=1;--$ii)
                     {
-                        last if ($result[$a] != 0);
+                        last if ($result[$ii] != 0);
                     }
-                    @result = @result[0..$a];
+                    @result = @result[0..$ii];
 
                     return \@result;
                 }
-                elsif ($div_by->[$a] < $divide->[$a])
+                elsif ($div_by->[$ii] < $divide->[$ii])
                 {
                     last;
                 }
@@ -218,23 +218,23 @@ sub divide_multi_digit
         }
 
 
-        for ($a=0; $a<=$db_digit; $a++)
+        for ($ii=0; $ii<=$db_digit; ++$ii)
         {
-            if ($divide->[$d_digit-$a] != $div_by->[$db_digit-$a])
+            if ($divide->[$d_digit-$ii] != $div_by->[$db_digit-$ii])
             {
                 last;
             }
         }
 
-        if ($a == $db_digit+1)
+        if ($ii == $db_digit+1)
         {
             $multiply_by = 1;
             $offset = $d_digit - $db_digit;
         }
-        elsif ($divide->[$d_digit-$a] > $div_by->[$db_digit-$a])
+        elsif ($divide->[$d_digit-$ii] > $div_by->[$db_digit-$ii])
         {
             $offset = $d_digit - $db_digit;
-            if ($a>0)
+            if ($ii>0)
             {
                 $multiply_by = 1;
             }
@@ -248,7 +248,7 @@ sub divide_multi_digit
         else
         {
             $offset = $d_digit - $db_digit - 1;
-            if ($a>1)
+            if ($ii>1)
             {
                 $multiply_by = $base-1;
             }
@@ -262,7 +262,7 @@ sub divide_multi_digit
         @product = @{multiply_multi_digit ($div_by, [ $multiply_by])};
         {
             my (@to_add);
-            for($a=0;$a<$offset;$a++)
+            for($ii=0;$ii<$offset;++$ii)
             {
                 push @to_add, 0;
             }
@@ -270,10 +270,10 @@ sub divide_multi_digit
         }
         $divide = subtract_multi_digit($divide, \@product);
         $result[$offset] += $multiply_by;
-        for($a=$offset;$result[$a]>=$base;$a++)
+        for($ii=$offset;$result[$ii]>=$base;++$ii)
         {
-            $result[$a+1] += int ($result[$a] / $base);
-            $result[$a] %= $base;
+            $result[$ii+1] += int ($result[$ii] / $base);
+            $result[$ii] %= $base;
         }
     }
 }
@@ -282,11 +282,11 @@ sub divide_multi_digit
 sub print_multi_digit
 {
     my $number = shift(@_);
-    my $a;
-    for($a=0;$a<scalar(@{$number});$a++)
+    my $ii;
+    for($ii=0;$ii<scalar(@{$number});++$ii)
     {
-        printf(($a==0)?"%i,":"%04i,", $number->[scalar(@{$number})-$a-1]);
-        #print $number->[scalar(@{$number})-$a-1];
+        printf(($ii==0)?"%i,":"%04i,", $number->[scalar(@{$number})-$ii-1]);
+        #print $number->[scalar(@{$number})-$ii-1];
     }
     print "\n";
 }
@@ -295,12 +295,12 @@ sub to_multi_digit
 {
     my $number = shift(@_);
     my @result;
-    my $a;
-    $a=0;
+    my $ii;
+    $ii=0;
     while ($number > 0)
     {
-        $result[$a] = $number % $base;
-        $a++;
+        $result[$ii] = $number % $base;
+        ++$ii;
         $number = int($number / $base);
     }
     return \@result;
@@ -331,4 +331,3 @@ open my $out_fh, '>', 'dump.txt';
 print "pi is ", join('', reverse(@{$pi})), "\n";
 print {$out_fh} "pi is ", join('', reverse(@{$pi})), "\n";
 close ($out_fh);
-
