@@ -17,10 +17,7 @@ sub add_multi_digit
     $max_len = scalar( @{$one} );
     $min_len = scalar( @{$two} );
 
-    for ( $ii = 0 ; $ii < $max_len + 1 ; ++$ii )
-    {
-        $result[$ii] = 0;
-    }
+    my @result = ( (0) x ( $max_len + 1 ) );
     for ( $ii = 0 ; $ii < $min_len ; ++$ii )
     {
         $sum               = $one->[$ii] + $two->[$ii] + $result[$ii];
