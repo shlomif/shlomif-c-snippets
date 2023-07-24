@@ -103,26 +103,26 @@ sub subtract_multi_digit
 sub multiply_multi_digit
 {
     my ($one, $two) = @_;
-    my (@result, $ii, $b, $product, $c);
+    my (@result, $ii, $jj, $product, $c);
     for($ii=0;$ii<scalar(@{$one})+scalar(@{$two});++$ii)
     {
         $result[$ii]=0;
     }
     for($ii=0;$ii<scalar(@{$one});++$ii)
     {
-        for($b=0;$b<scalar(@{$two});$b++)
+        for($jj=0;$jj<scalar(@{$two});$jj++)
         {
-            $product = $one->[$ii] * $two->[$b];
-            $result[$ii+$b] += $product % $base;
-            for($c=$ii+$b;$result[$c]>=$base;$c++)
+            $product = $one->[$ii] * $two->[$jj];
+            $result[$ii+$jj] += $product % $base;
+            for($c=$ii+$jj;$result[$c]>=$base;$c++)
             {
                 $result[$c+1] += int ($result[$c] / $base);
                 $result[$c] %= $base;
             }
             if (int ($product / $base) > 0)
             {
-                $result[$ii+$b+1] += int ($product / $base);
-                for($c=$ii+$b+1;$result[$c]>=$base;$c++)
+                $result[$ii+$jj+1] += int ($product / $base);
+                for($c=$ii+$jj+1;$result[$c]>=$base;$c++)
                 {
                     $result[$c+1] += int ($result[$c] / $base);
                     $result[$c] %= $base;
@@ -240,9 +240,9 @@ sub divide_multi_digit
             }
             else
             {
-                my $b = int (($divide->[$d_digit]*$base + (($d_digit>0)?$divide->[$d_digit-1]:0)) /
+                my $jj = int (($divide->[$d_digit]*$base + (($d_digit>0)?$divide->[$d_digit-1]:0)) /
                              ($div_by->[$db_digit]*$base + (($db_digit>0)?$div_by->[$db_digit-1]:0)));
-                $multiply_by = ($b>1)?($b-1):$b;
+                $multiply_by = ($jj>1)?($jj-1):$jj;
             }
         }
         else
@@ -254,9 +254,9 @@ sub divide_multi_digit
             }
             else
             {
-                my $b = int (($divide->[$d_digit]*$base*$base + (($d_digit>0)?$divide->[$d_digit-1]:0)*$base +  (($d_digit>1)?$divide->[$d_digit-1]:0)) /
+                my $jj = int (($divide->[$d_digit]*$base*$base + (($d_digit>0)?$divide->[$d_digit-1]:0)*$base +  (($d_digit>1)?$divide->[$d_digit-1]:0)) /
                              ($div_by->[$db_digit]*$base + (($db_digit>0)?$div_by->[$db_digit-1]:0)));
-                $multiply_by = ($b>1)?($b-1):$b;
+                $multiply_by = ($jj>1)?($jj-1):$jj;
             }
         }
         @product = @{multiply_multi_digit ($div_by, [ $multiply_by])};
