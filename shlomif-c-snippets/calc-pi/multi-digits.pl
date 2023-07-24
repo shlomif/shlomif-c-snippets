@@ -143,11 +143,7 @@ sub multiply_multi_digit
 sub divide_multi_digit
 {
     my ($divide, $div_by) = @_;
-    $divide = [ map {$_ // 0} @{$divide} ]; # clone it because we are going to change it
-    while (not defined $divide->[-1])
-    {
-        pop @$divide;
-    }
+    $divide = [ @{$divide} ]; # clone it because we are going to change it
     my (@result, $a, $d_digit, $db_digit, $offset, $multiply_by, @product);
 
     $result[0] = 0;
