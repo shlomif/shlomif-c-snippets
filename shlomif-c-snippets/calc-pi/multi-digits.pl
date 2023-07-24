@@ -34,11 +34,10 @@ sub add_multi_digit
         $result[ $ii + 1 ] = int( $sum / $base );
     }
 
-    for ( $ii = scalar(@result) - 1 ; $ii >= 1 ; --$ii )
+    while ( @result > 1 and ( $result[-1] == 0 ) )
     {
-        last if ( $result[$ii] != 0 );
+        pop @result;
     }
-    @result = @result[ 0 .. $ii ];
 
     return \@result;
 }
