@@ -294,12 +294,9 @@ sub to_multi_digit
 {
     my $number = shift(@_);
     my @result;
-    my $ii;
-    $ii = 0;
     while ( $number > 0 )
     {
-        $result[$ii] = $number % $base;
-        ++$ii;
+        push @result, $number % $base;
         $number = int( $number / $base );
     }
     return \@result;
