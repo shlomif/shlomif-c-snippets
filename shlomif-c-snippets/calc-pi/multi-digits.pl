@@ -143,7 +143,11 @@ sub multiply_multi_digit
 sub divide_multi_digit
 {
     my ($divide, $div_by) = @_;
-    $divide = [ @{$divide} ]; # clone it because we are going to change it
+    $divide = [ map {$_ // 0} @{$divide} ]; # clone it because we are going to change it
+    while (not defined $divide->[-1])
+    {
+        pop @$divide;
+    }
     my (@result, $a, $d_digit, $db_digit, $offset, $multiply_by, @product);
 
     $result[0] = 0;
@@ -169,6 +173,10 @@ sub divide_multi_digit
 
     while (1)
     {
+        if ($d_digit > $#$divide)
+        {
+            $d_digit = $#$divide;
+        }
         # Check if the division can be ended
         for($a=$d_digit, $d_digit = -1;$a>=0;$a--)
         {
@@ -321,7 +329,7 @@ for my $i (1 .. 130)
     #print "numer is ", join('', reverse(@{$numer})), "\n";
 }
 
-my $pi = divide_multi_digit([ split(//, '0'x40), @{$numer} ], $denom);
+my $pi = divide_multi_digit([ ((0,) x 40), @{$numer} ], $denom);
 
 open my $out_fh, '>', 'dump.txt';
 print "pi is ", join('', reverse(@{$pi})), "\n";
