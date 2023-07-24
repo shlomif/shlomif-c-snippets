@@ -42,7 +42,7 @@ sub add_multi_digit
 sub subtract_multi_digit
 {
     my ( $one, $two ) = @_;
-    my ( $min_len, $max_len, @result, $ii, $diff );
+    my ( $min_len, $max_len, $ii, $diff );
     if ( scalar( @{$one} ) > scalar( @{$two} ) )
     {
         $max_len = scalar( @{$one} );
@@ -54,10 +54,7 @@ sub subtract_multi_digit
         $max_len = scalar( @{$two} );
     }
 
-    for ( $ii = 0 ; $ii < $max_len ; ++$ii )
-    {
-        $result[$ii] = 0;
-    }
+    my @result = ( (0) x ($max_len) );
     for ( $ii = 0 ; $ii < $max_len ; ++$ii )
     {
         $diff = $result[$ii];
@@ -80,11 +77,10 @@ sub subtract_multi_digit
         }
     }
 
-    for ( $ii = scalar(@result) - 1 ; $ii >= 1 ; --$ii )
+    while ( @result > 1 and ( $result[-1] == 0 ) )
     {
-        last if ( $result[$ii] != 0 );
+        pop @result;
     }
-    @result = @result[ 0 .. $ii ];
 
     return \@result;
 }
