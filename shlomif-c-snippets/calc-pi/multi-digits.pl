@@ -9,7 +9,7 @@ my $base = 10000;
 sub add_multi_digit
 {
     my ( $one, $two ) = @_;
-    my ( $min_len, $max_len, @result, $ii, $sum, );
+    my ( $min_len, $max_len, $ii, $sum, );
     if ( scalar( @{$one} ) < scalar( @{$two} ) )
     {
         ( $one, $two ) = ( $two, $one );
