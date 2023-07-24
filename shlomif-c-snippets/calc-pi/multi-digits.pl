@@ -9,20 +9,13 @@ my $base = 10000;
 sub add_multi_digit
 {
     my ( $one, $two ) = @_;
-    my ( $min_len, $max_len, @result, $ii, $sum, $temp );
-    if ( scalar( @{$one} ) > scalar( @{$two} ) )
+    my ( $min_len, $max_len, @result, $ii, $sum, );
+    if ( scalar( @{$one} ) < scalar( @{$two} ) )
     {
-        $max_len = scalar( @{$one} );
-        $min_len = scalar( @{$two} );
+        ( $one, $two ) = ( $two, $one );
     }
-    else
-    {
-        $min_len = scalar( @{$one} );
-        $max_len = scalar( @{$two} );
-        $temp    = $one;
-        $one     = $two;
-        $two     = $temp;
-    }
+    $max_len = scalar( @{$one} );
+    $min_len = scalar( @{$two} );
 
     for ( $ii = 0 ; $ii < $max_len + 1 ; ++$ii )
     {
