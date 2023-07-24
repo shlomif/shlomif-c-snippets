@@ -6,6 +6,17 @@ my $base = 10000;
 
 #my $base = 10;
 
+sub _trim_zeroes
+{
+    my ($result) = @_;
+    while ( @$result > 1 and ( $result->[-1] == 0 ) )
+    {
+        pop @$result;
+    }
+
+    return;
+}
+
 sub add_multi_digit
 {
     my ( $one, $two ) = @_;
@@ -30,12 +41,7 @@ sub add_multi_digit
         $result[$ii]       = $sum % $base;
         $result[ $ii + 1 ] = int( $sum / $base );
     }
-
-    while ( @result > 1 and ( $result[-1] == 0 ) )
-    {
-        pop @result;
-    }
-
+    _trim_zeroes( \@result );
     return \@result;
 }
 
@@ -77,11 +83,7 @@ sub subtract_multi_digit
         }
     }
 
-    while ( @result > 1 and ( $result[-1] == 0 ) )
-    {
-        pop @result;
-    }
-
+    _trim_zeroes( \@result );
     return \@result;
 }
 
@@ -116,11 +118,7 @@ sub multiply_multi_digit
         }
     }
 
-    for ( $ii = scalar(@result) - 1 ; $ii >= 1 ; --$ii )
-    {
-        last if ( $result[$ii] != 0 );
-    }
-    @result = @result[ 0 .. $ii ];
+    _trim_zeroes( \@result );
 
     return \@result;
 }
@@ -175,12 +173,7 @@ sub divide_multi_digit
 
         if ( $db_digit > $d_digit )
         {
-            for ( $ii = scalar(@result) - 1 ; $ii >= 1 ; --$ii )
-            {
-                last if ( $result[$ii] != 0 );
-            }
-            @result = @result[ 0 .. $ii ];
-
+            _trim_zeroes( \@result );
             return \@result;
         }
 
@@ -190,11 +183,7 @@ sub divide_multi_digit
             {
                 if ( $div_by->[$ii] > $divide->[$ii] )
                 {
-                    for ( $ii = scalar(@result) - 1 ; $ii >= 1 ; --$ii )
-                    {
-                        last if ( $result[$ii] != 0 );
-                    }
-                    @result = @result[ 0 .. $ii ];
+                    _trim_zeroes( \@result );
 
                     return \@result;
                 }
