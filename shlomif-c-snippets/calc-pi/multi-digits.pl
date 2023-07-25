@@ -20,25 +20,25 @@ sub _trim_zeroes
 sub add_multi_digit
 {
     my ( $one, $two ) = @_;
-    my ( $min_len, $max_len, $ii, $sum, );
+    my ( $ii, );
     if ( scalar( @{$one} ) < scalar( @{$two} ) )
     {
         ( $one, $two ) = ( $two, $one );
     }
-    $max_len = scalar( @{$one} );
-    $min_len = scalar( @{$two} );
+    my $max_len = scalar( @{$one} );
+    my $min_len = scalar( @{$two} );
 
     my @result = ( (0) x ( $max_len + 1 ) );
     for ( $ii = 0 ; $ii < $min_len ; ++$ii )
     {
-        $sum               = $one->[$ii] + $two->[$ii] + $result[$ii];
-        $result[$ii]       = $sum % $base;
+        my $sum = $one->[$ii] + $two->[$ii] + $result[$ii];
+        $result[$ii] = $sum % $base;
         $result[ $ii + 1 ] = int( $sum / $base );
     }
     for ( ; $ii < $max_len ; ++$ii )
     {
-        $sum               = $one->[$ii] + $result[$ii];
-        $result[$ii]       = $sum % $base;
+        my $sum = $one->[$ii] + $result[$ii];
+        $result[$ii] = $sum % $base;
         $result[ $ii + 1 ] = int( $sum / $base );
     }
     _trim_zeroes( \@result );
@@ -322,9 +322,13 @@ for my $i ( 1 .. 130 )
     #print "numer is ", join('', reverse(@{$numer})), "\n";
 }
 
-my $pi = divide_multi_digit( [ ( ( 0, ) x 40 ), @{$numer} ], $denom );
-
+my $pi     = divide_multi_digit( [ ( ( 0, ) x 40 ), @{$numer} ], $denom );
+my $pi_str = join( '', reverse( @{$pi} ) );
+if ( $pi_str !~ m#\A3(?:\.)?1415926535#ms )
+{
+    die qq#"$pi_str" has wrong digits!#;
+}
 open my $out_fh, '>', 'dump.txt';
-print "pi is ",           join( '', reverse( @{$pi} ) ), "\n";
-print {$out_fh} "pi is ", join( '', reverse( @{$pi} ) ), "\n";
+print "pi is ",           $pi_str, "\n";
+print {$out_fh} "pi is ", $pi_str, "\n";
 close($out_fh);
