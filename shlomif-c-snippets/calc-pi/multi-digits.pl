@@ -328,7 +328,8 @@ if ( $pi_str !~ m#\A3(?:\.)?1415926535#ms )
 {
     die qq#"$pi_str" has wrong digits!#;
 }
+my $msg = "pi is " . $pi_str . "\n";
 open my $out_fh, '>', 'dump.txt';
-print "pi is ",           $pi_str, "\n";
-print {$out_fh} "pi is ", $pi_str, "\n";
+print $msg;
+print {$out_fh} $msg;
 close($out_fh);
