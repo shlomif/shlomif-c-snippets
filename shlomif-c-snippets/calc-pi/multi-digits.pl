@@ -312,10 +312,10 @@ for my $i ( 1 .. 130 )
     {
         print "$i\n";
     }
-    $denom = multiply_multi_digit( $denom, to_multi_digit( ( 2 * $i + 1 ) ) );
+    my $factor = to_multi_digit( 2 * $i + 1 );
+    $denom = multiply_multi_digit( $denom, $factor, );
     $item  = multiply_multi_digit( $item,  to_multi_digit($i) );
-    $numer = add_multi_digit( $item,
-        multiply_multi_digit( $numer, to_multi_digit( 2 * $i + 1 ) ) );
+    $numer = add_multi_digit( $item, multiply_multi_digit( $numer, $factor, ) );
 
     #print "denom is ", join('', reverse(@{$denom})), "\n";
     #print "item is ", join('', reverse(@{$item})), "\n";
