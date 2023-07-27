@@ -90,11 +90,8 @@ sub subtract_multi_digit
 sub multiply_multi_digit
 {
     my ( $one, $two ) = @_;
-    my ( @result, $ii, $jj, $product, $c );
-    for ( $ii = 0 ; $ii < scalar( @{$one} ) + scalar( @{$two} ) ; ++$ii )
-    {
-        $result[$ii] = 0;
-    }
+    my ( $ii, $jj, $product, $c );
+    my @result = ( (0) x ( scalar( @{$one} ) + scalar( @{$two} ) ) );
     for ( $ii = 0 ; $ii < scalar( @{$one} ) ; ++$ii )
     {
         for ( $jj = 0 ; $jj < scalar( @{$two} ) ; $jj++ )
@@ -256,15 +253,8 @@ sub divide_multi_digit
             }
         }
         @product = @{ multiply_multi_digit( $div_by, [$multiply_by] ) };
-        {
-            my (@to_add);
-            for ( $ii = 0 ; $ii < $offset ; ++$ii )
-            {
-                push @to_add, 0;
-            }
-            @product = ( @to_add, @product );
-        }
-        $divide = subtract_multi_digit( $divide, \@product );
+        @product = ( ( ( 0, ) x $offset ), @product );
+        $divide  = subtract_multi_digit( $divide, \@product );
         $result[$offset] += $multiply_by;
         for ( $ii = $offset ; $result[$ii] >= $base ; ++$ii )
         {
