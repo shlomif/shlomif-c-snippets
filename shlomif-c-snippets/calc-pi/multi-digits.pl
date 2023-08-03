@@ -6,6 +6,26 @@ my $base = 10000;
 
 #my $base = 10;
 
+sub _base_moddiv
+{
+    my ($n) = @_;
+    return ( $n % $base, int( $n / $base ) );
+    die;
+
+    return;
+}
+{
+    my @r = _base_moddiv( 9 * $base + 5 );
+    if ( $r[0] != 5 )
+    {
+        die;
+    }
+    if ( $r[1] != 9 )
+    {
+        die;
+    }
+}
+
 sub _trim_zeroes
 {
     my ($result) = @_;
