@@ -52,14 +52,12 @@ sub add_multi_digit
     for ( $ii = 0 ; $ii < $min_len ; ++$ii )
     {
         my $sum = $one->[$ii] + $two->[$ii] + $result[$ii];
-        $result[$ii] = $sum % $base;
-        $result[ $ii + 1 ] = int( $sum / $base );
+        @result[ $ii, $ii + 1 ] = _base_moddiv($sum);
     }
     for ( ; $ii < $max_len ; ++$ii )
     {
         my $sum = $one->[$ii] + $result[$ii];
-        $result[$ii] = $sum % $base;
-        $result[ $ii + 1 ] = int( $sum / $base );
+        @result[ $ii, $ii + 1 ] = _base_moddiv($sum);
     }
     _trim_zeroes( \@result );
     return \@result;
