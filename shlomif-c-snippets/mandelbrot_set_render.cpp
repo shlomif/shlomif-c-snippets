@@ -28,12 +28,6 @@
 #include <apr_general.h>
 #include <apr_getopt.h>
 
-#if defined(__GNUC__)
-#define GCC_UNUSED __attribute__((unused))
-#else
-#define GCC_UNUSED
-#endif
-
 typedef int_fast32_t my_int_type;
 const my_int_type MAX_TEST = 82;
 typedef long double coordtype;
@@ -177,7 +171,8 @@ int main(int argc, char *argv[])
     const size_t COMMAND_MARGIN = 4;
     char command[COMMAND_MAX_LEN + COMMAND_MARGIN];
     const char *const bitmap_filename = "mandel.bmp";
-    snprintf(command, COMMAND_MAX_LEN, "gm convert -depth 8 -size %lux%lu+0 gray:%s %s",
+    snprintf(command, COMMAND_MAX_LEN,
+        "gm convert -depth 8 -size %lux%lu+0 gray:%s %s",
         static_cast<unsigned long>(ret.r_width),
         static_cast<unsigned long>(ret.i_height), ret.filename,
         bitmap_filename);
