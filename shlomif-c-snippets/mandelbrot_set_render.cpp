@@ -37,11 +37,11 @@ static my_int_type mandelbrot_val(const coordtype r, const coordtype i)
 {
     const complextype c(r, i);
     complextype z(0, 0);
-    for (my_int_type a = 0; a < MAX_TEST; ++a)
+    for (my_int_type i = 0; i < MAX_TEST; ++i)
     {
         z = z * z + c;
         if (norm(z) >= 4.0)
-            return a;
+            return i;
     }
     return MAX_TEST;
 }
@@ -103,8 +103,8 @@ static mandel__ret_data generate_mandelbrot_set(
     {
         for (my_int_type r = init_r; r <= final_r; ++r)
         {
-            const my_int_type a = mandelbrot_val(r * rdelta, i * idelta);
-            my_putpixel(f, mymap[a]);
+            const my_int_type val = mandelbrot_val(r * rdelta, i * idelta);
+            my_putpixel(f, mymap[val]);
         }
     }
     fclose(f);
