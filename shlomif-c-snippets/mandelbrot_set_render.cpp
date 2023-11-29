@@ -173,15 +173,16 @@ int main(int argc, char *argv[])
     const mandel__ret_data ret =
         generate_mandelbrot_set(0, 0, width - 1, height - 1);
 
-    char command[1000];
+    const size_t COMMAND_MAX_LEN = 800;
+    char command[COMMAND_MAX_LEN + 4];
     const char *const bitmap_filename = "mandel.bmp";
-    snprintf(command, 800, "gm convert -depth 8 -size %lux%lu+0 gray:%s %s",
+    snprintf(command, COMMAND_MAX_LEN, "gm convert -depth 8 -size %lux%lu+0 gray:%s %s",
         static_cast<unsigned long>(ret.r_width),
         static_cast<unsigned long>(ret.i_height), ret.filename,
         bitmap_filename);
     system(command);
 
-    snprintf(command, 800, "gwenview %s", bitmap_filename);
+    snprintf(command, COMMAND_MAX_LEN, "gwenview %s", bitmap_filename);
     system(command);
 
     apr_terminate();
