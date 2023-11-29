@@ -174,7 +174,8 @@ int main(int argc, char *argv[])
         generate_mandelbrot_set(0, 0, width - 1, height - 1);
 
     const size_t COMMAND_MAX_LEN = 800;
-    char command[COMMAND_MAX_LEN + 4];
+    const size_t COMMAND_MARGIN = 4;
+    char command[COMMAND_MAX_LEN + COMMAND_MARGIN];
     const char *const bitmap_filename = "mandel.bmp";
     snprintf(command, COMMAND_MAX_LEN, "gm convert -depth 8 -size %lux%lu+0 gray:%s %s",
         static_cast<unsigned long>(ret.r_width),
