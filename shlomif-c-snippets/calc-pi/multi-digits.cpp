@@ -155,15 +155,13 @@ int add_multi_digit(MultiDigit & one, MultiDigit & two, MultiDigit * result)
 
 int subtract_multi_digit(MultiDigit & one, MultiDigit & two, MultiDigit * result)
 {
-    int min_len, max_len, a, diff;
+    int max_len, a, diff;
     if (one.length > two.length)
     {
         max_len = one.length;
-        min_len = two.length;
     }
     else
     {
-        min_len = one.length;
         max_len = two.length;
     }
 
