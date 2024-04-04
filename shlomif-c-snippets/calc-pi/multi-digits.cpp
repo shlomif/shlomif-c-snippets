@@ -18,7 +18,7 @@ public:
     int from_number(unsigned long long number);
     void print(FILE *);
     void copy(MultiDigit & a);
-    int from_string(char * s);
+    void from_string(char * s);
     int from_hexstring(char * s);
 };
 
@@ -85,24 +85,17 @@ void MultiDigit::print(FILE * f = stdout)
 int multiply_multi_digit(MultiDigit & one, MultiDigit & two, MultiDigit * result);
 int add_multi_digit(MultiDigit & one, MultiDigit & two, MultiDigit * result);
 
-int MultiDigit::from_string(char * s)
+void MultiDigit::from_string(char * s)
 {
-    if (!strncmp(s,"0x",2))
-    {
-        // return from_hexstring(s+2);
-    }
-    else
-    {
-        MultiDigit d, accum2(0), ten(10);
+    MultiDigit d, accum2(0), ten(10);
 
-        from_number(0);
+    from_number(0);
 
-        while (((*s) >= '0') && ((*s) <= '9'))
-        {
-            d.from_number(*s-'0');
-            multiply_multi_digit(*(this), ten, &accum2);
-            add_multi_digit(accum2, d, this);
-        }
+    while (((*s) >= '0') && ((*s) <= '9'))
+    {
+        d.from_number(*s-'0');
+        multiply_multi_digit(*(this), ten, &accum2);
+        add_multi_digit(accum2, d, this);
     }
 }
 
