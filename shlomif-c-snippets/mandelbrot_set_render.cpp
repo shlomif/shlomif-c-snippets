@@ -30,17 +30,63 @@
 
 typedef int_fast32_t my_int_type;
 const my_int_type MAX_TEST = 82;
+
+// #define USE_INTEGERS
+
+#ifndef USE_INTEGERS
 typedef long double coordtype;
-typedef std::complex<coordtype> complextype;
+typedef std::complex<coordtype> ComplexType;
+const coordtype BASE = 1;
+const coordtype MAX_NORM = 2;
+static coordtype base_norm(const ComplexType c) { return norm(c); }
+#else
+typedef long long coordtype;
+const coordtype BASE = 1000000LL;
+
+struct ComplexType
+{
+    coordtype r, i;
+    ComplexType(coordtype rr, coordtype ii)
+    {
+        r = rr;
+        i = ii;
+    };
+    void times(const ComplexType other)
+    {
+        ComplexType copy(*this);
+        r = ((copy.r * other.r - copy.i * other.i) / BASE);
+        i = ((copy.r * other.i + copy.i * other.r) / BASE);
+    }
+    void add(const ComplexType other)
+    {
+        r += other.r;
+        i += other.i;
+    }
+};
+
+const coordtype MAX_NORM = 2 * BASE * BASE;
+static coordtype base_norm(const ComplexType c)
+{
+    return (c.r * c.r + c.i * c.i);
+}
+#endif
+
+static coordtype three(3);
+static coordtype two(2);
 
 static my_int_type mandelbrot_val(const coordtype r, const coordtype i)
 {
-    const complextype c(r, i);
-    complextype z(0, 0);
+    const ComplexType c(r, i);
+    ComplexType z(0, 0);
     for (my_int_type i = 0; i < MAX_TEST; ++i)
     {
+#ifndef USE_INTEGERS
         z = z * z + c;
-        if (norm(z) >= 4.0)
+#else
+        z.times(z);
+        z.add(c);
+#endif
+        if (base_norm(z) >= MAX_NORM)
             return i;
     }
     return MAX_TEST;
@@ -81,7 +127,8 @@ static inline void init_mymap()
 static mandel__ret_data generate_mandelbrot_set(
     my_int_type x1, my_int_type y1, my_int_type x2, my_int_type y2)
 {
-    coordtype rdelta = 3.0L / (x2 - x1), idelta = 2.0L / (y2 - y1);
+    coordtype rdelta = (three * BASE) / (x2 - x1),
+              idelta = (two * BASE) / (y2 - y1);
     const my_int_type init_r = 2 * (x1 - x2) / 3;
     my_int_type final_r = (x2 - x1) / 3;
     my_int_type final_i = (y2 - y1) / 2;
