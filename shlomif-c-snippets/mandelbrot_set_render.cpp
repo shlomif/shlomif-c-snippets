@@ -31,7 +31,7 @@
 typedef int_fast32_t my_int_type;
 const my_int_type MAX_TEST = 82;
 
-// #define USE_INTEGERS
+#define USE_INTEGERS
 
 #ifndef USE_INTEGERS
 typedef long double coordtype;
@@ -57,11 +57,13 @@ struct ComplexType
         r = ((copy.r * other.r - copy.i * other.i) / BASE);
         i = ((copy.r * other.i + copy.i * other.r) / BASE);
     }
+    void operator*=(const ComplexType other) { times(other); }
     void add(const ComplexType other)
     {
         r += other.r;
         i += other.i;
     }
+    void operator+=(const ComplexType other) { add(other); }
 };
 
 const coordtype MAX_NORM = 2 * BASE * BASE;
@@ -80,12 +82,8 @@ static my_int_type mandelbrot_val(const coordtype r, const coordtype i)
     ComplexType z(0, 0);
     for (my_int_type i = 0; i < MAX_TEST; ++i)
     {
-#ifndef USE_INTEGERS
-        z = z * z + c;
-#else
-        z.times(z);
-        z.add(c);
-#endif
+        z *= z;
+        z += c;
         if (base_norm(z) >= MAX_NORM)
             return i;
     }
