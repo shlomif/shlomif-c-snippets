@@ -31,7 +31,7 @@
 typedef int_fast32_t my_int_type;
 const my_int_type MAX_TEST = 82;
 
-#define USE_INTEGERS
+// #define USE_INTEGERS
 
 #ifndef USE_INTEGERS
 typedef long double coordtype;

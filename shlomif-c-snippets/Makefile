@@ -25,7 +25,7 @@ reformat:
 rebuild: clean reformat mandel.exe
 
 run: rebuild
-	./mandel.exe --width 1920 --height 1080
+	FACTOR=2 && ./mandel.exe --width $$(( 1920 * $$FACTOR )) --height $$(( 1080 * $$FACTOR ))
 
 # vim:ft=make
 #
