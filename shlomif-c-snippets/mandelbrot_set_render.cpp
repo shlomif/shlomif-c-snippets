@@ -41,15 +41,18 @@ const coordtype MAX_NORM = 2;
 static coordtype base_norm(const ComplexType c) { return norm(c); }
 #else
 typedef long long coordtype;
+#ifdef BREAK_ME
+#define PROTO_BASE 1024
+#else
 #define PROTO_BASE 1000000
+#endif
 const coordtype BASE = PROTO_BASE;
 //
-// if 0 PROTO_BASE == 1048576
-#ifdef NOTHIN
+#if 0 // PROTO_BASE == 1024
 #error foo
-#define BASE_DIV(x) ((x) >> 10)
+static coordtype BASE_DIV(const coordtype x) { return x >> 10; }
 #else
-#define BASE_DIV(x) ((x) / BASE)
+static coordtype BASE_DIV(const coordtype x) { return x / BASE; }
 #endif
 
 struct ComplexType
@@ -63,8 +66,8 @@ struct ComplexType
     void times(const ComplexType other)
     {
         ComplexType copy(*this);
-        r = ((copy.r * other.r - copy.i * other.i) / BASE);
-        i = ((copy.r * other.i + copy.i * other.r) / BASE);
+        r = BASE_DIV((copy.r * other.r - copy.i * other.i));
+        i = BASE_DIV((copy.r * other.i + copy.i * other.r));
     }
     void operator*=(const ComplexType other) { times(other); }
     void add(const ComplexType other)
