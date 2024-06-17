@@ -48,10 +48,8 @@ typedef long long coordtype;
 #define PROTO_BASE 1000000
 #endif
 const coordtype BASE = PROTO_BASE;
-//
-#if 0 // PROTO_BASE == 1024
-#error foo
-static coordtype BASE_DIV(const coordtype x) { return x >> 10; }
+#if PROTO_BASE == 1048576
+static coordtype BASE_DIV(const coordtype x) { return x >> 20; }
 #else
 static coordtype BASE_DIV(const coordtype x) { return x / BASE; }
 #endif
