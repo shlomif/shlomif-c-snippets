@@ -31,7 +31,7 @@
 typedef int_fast32_t my_int_type;
 const my_int_type MAX_TEST = 82;
 
-// #define USE_INTEGERS
+#define USE_INTEGERS
 
 #ifndef USE_INTEGERS
 typedef long double coordtype;
@@ -41,7 +41,16 @@ const coordtype MAX_NORM = 2;
 static coordtype base_norm(const ComplexType c) { return norm(c); }
 #else
 typedef long long coordtype;
-const coordtype BASE = 1000000LL;
+#define PROTO_BASE 1000000
+const coordtype BASE = PROTO_BASE;
+//
+// if 0 PROTO_BASE == 1048576
+#ifdef NOTHIN
+#error foo
+#define BASE_DIV(x) ((x) >> 10)
+#else
+#define BASE_DIV(x) ((x) / BASE)
+#endif
 
 struct ComplexType
 {
