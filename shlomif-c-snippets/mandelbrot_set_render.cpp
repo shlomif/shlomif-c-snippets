@@ -41,8 +41,9 @@ const coordtype MAX_NORM = 2;
 static coordtype base_norm(const ComplexType c) { return norm(c); }
 #else
 typedef long long coordtype;
+#define BREAK_ME
 #ifdef BREAK_ME
-#define PROTO_BASE 1024
+#define PROTO_BASE 1048576
 #else
 #define PROTO_BASE 1000000
 #endif
