@@ -82,15 +82,23 @@ static coordtype base_norm(const ComplexType c)
 static coordtype three(3);
 static coordtype two(2);
 
-static my_int_type mandelbrot_val(const coordtype r, const coordtype i)
+static my_int_type mandelbrot_val(
+    const coordtype init_r, const coordtype init_i)
 {
-    const ComplexType c(r, i);
-    ComplexType z(0, 0);
+    coordtype zr = 0;
+    coordtype sqzr = 0;
+    coordtype zi = 0;
+    coordtype sqzi = 0;
     for (my_int_type i = 0; i < MAX_TEST; ++i)
     {
-        z *= z;
-        z += c;
-        if (base_norm(z) >= MAX_NORM)
+        coordtype newzr = BASE_DIV(sqzr - sqzi) + init_r;
+        coordtype newzi = BASE_DIV(2 * zr * zi) + init_i;
+
+        zr = newzr;
+        zi = newzi;
+        sqzr = zr * zr;
+        sqzi = zi * zi;
+        if (sqzr + sqzi >= MAX_NORM)
             return i;
     }
     return MAX_TEST;
