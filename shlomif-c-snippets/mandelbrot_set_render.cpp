@@ -38,7 +38,6 @@ typedef long double coordtype;
 typedef std::complex<coordtype> ComplexType;
 const coordtype BASE = 1;
 const coordtype MAX_NORM = 2;
-static coordtype base_norm(const ComplexType c) { return norm(c); }
 #else
 typedef long long coordtype;
 #define PROTO_BASE 1048576
@@ -73,10 +72,6 @@ struct ComplexType
 };
 
 const coordtype MAX_NORM = 2 * BASE * BASE;
-static coordtype base_norm(const ComplexType c)
-{
-    return (c.r * c.r + c.i * c.i);
-}
 #endif
 
 static coordtype three(3);
@@ -108,6 +103,15 @@ static my_int_type mandelbrot_val(
 }
 
 #else
+
+#ifndef USE_INTEGERS
+static coordtype base_norm(const ComplexType c) { return norm(c); }
+#else
+static coordtype base_norm(const ComplexType c)
+{
+    return (c.r * c.r + c.i * c.i);
+}
+#endif
 
 static my_int_type mandelbrot_val(const coordtype r, const coordtype i)
 {
