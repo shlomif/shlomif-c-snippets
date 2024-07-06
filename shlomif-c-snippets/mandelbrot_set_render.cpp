@@ -82,6 +82,33 @@ static coordtype base_norm(const ComplexType c)
 static coordtype three(3);
 static coordtype two(2);
 
+#define OPT1
+
+#ifdef OPT1
+
+static my_int_type mandelbrot_val(
+    const coordtype init_r, const coordtype init_i)
+{
+    coordtype zr = 0;
+    coordtype sqzr = 0;
+    coordtype zi = 0;
+    coordtype sqzi = 0;
+    for (my_int_type i = 0; i < MAX_TEST; ++i)
+    {
+        const coordtype newzr = BASE_DIV(sqzr - sqzi) + init_r;
+        zi = BASE_DIV(2 * zr * zi) + init_i;
+
+        zr = newzr;
+        sqzr = zr * zr;
+        sqzi = zi * zi;
+        if (sqzr + sqzi >= MAX_NORM)
+            return i;
+    }
+    return MAX_TEST;
+}
+
+#else
+
 static my_int_type mandelbrot_val(const coordtype r, const coordtype i)
 {
     const ComplexType c(r, i);
@@ -95,6 +122,8 @@ static my_int_type mandelbrot_val(const coordtype r, const coordtype i)
     }
     return MAX_TEST;
 }
+
+#endif
 
 #define FILENAME_SIZE 198
 #define FILENAME_SIZE_MARGIN 2
